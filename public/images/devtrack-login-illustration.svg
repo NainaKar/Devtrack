@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="120 100 420 340" width="100%" height="100%" fill="none" style="overflow: visible;">
+  <defs>
+    <!-- Soft shadow filter for floating badges -->
+    <filter id="badgeShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#2e1a10" flood-opacity="0.14" />
+    </filter>
+    <filter id="laptopShadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#2e1a10" flood-opacity="0.16" />
+    </filter>
+
+    <style>
+      @keyframes floatA {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+      }
+      @keyframes floatB {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-4px); }
+      }
+      @keyframes floatC {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+      }
+      .badge-anim-1 { animation: floatA 4.2s ease-in-out infinite; }
+      .badge-anim-2 { animation: floatB 4.8s ease-in-out infinite 0.7s; }
+      .badge-anim-3 { animation: floatC 4.5s ease-in-out infinite 1.4s; }
+      @media (prefers-reduced-motion: reduce) {
+        .badge-anim-1, .badge-anim-2, .badge-anim-3 { animation: none !important; }
+      }
+    </style>
+  </defs>
+
+  <!-- Large Pale Circle Behind Laptop (Fully visible without clipping) -->
+  <circle cx="315" cy="275" r="150" fill="#f2e4d4" opacity="0.85" />
+  
+  <!-- Sage Accent Circle (Top-Left) -->
+  <circle cx="195" cy="180" r="38" fill="#d9e5db" opacity="0.9" />
+  
+  <!-- Peach Accent Circle (Bottom-Right) -->
+  <circle cx="475" cy="375" r="28" fill="#f2dfd0" opacity="0.75" />
+
+  <!-- Dotted Roadmap Path -->
+  <path d="M 160 380 C 190 395, 235 365, 260 320 C 285 270, 340 175, 435 190 C 485 200, 480 315, 435 355 C 415 375, 380 390, 335 380"
+        stroke="#caa892" stroke-width="2.5" stroke-dasharray="4 6" stroke-linecap="round" fill="none" />
+
+  <!-- Milestone Flagpole at Top-Right -->
+  <g transform="translate(435, 155)">
+    <line x1="0" y1="0" x2="0" y2="38" stroke="#3a2218" stroke-width="3" stroke-linecap="round" />
+    <path d="M 0 0 L 32 8 L 0 17 Z" fill="#b4561f" />
+    <circle cx="0" cy="38" r="4.5" fill="#3a2218" />
+    <!-- Small pale peach circle next to flag -->
+    <circle cx="20" cy="35" r="14" fill="#faebd7" opacity="0.8" />
+  </g>
+
+  <!-- Waypoint Milestone Indicators -->
+  <!-- Checkpoint 1 (Bottom Left) -->
+  <g transform="translate(160, 380)">
+    <circle cx="0" cy="0" r="10" fill="#f8f1e7" stroke="#b4561f" stroke-width="2.5" />
+    <path d="M -4 0 L -1 3 L 5 -3" stroke="#b4561f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <!-- Checkpoint 2 (Right mid) -->
+  <g transform="translate(470, 245)">
+    <circle cx="0" cy="0" r="9" fill="#f8f1e7" stroke="#557a5e" stroke-width="2.5" />
+  </g>
+  <!-- Checkpoint 3 (Right lower) -->
+  <g transform="translate(445, 315)">
+    <circle cx="0" cy="0" r="9" fill="#f8f1e7" stroke="#557a5e" stroke-width="2.5" />
+    <path d="M -3 0 L -1 2 L 4 -2" stroke="#557a5e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- Sparkle Stars -->
+  <!-- Top Center Terracotta Sparkle -->
+  <path d="M 315 175 Q 315 186 326 186 Q 315 186 315 197 Q 315 186 304 186 Q 315 186 315 175 Z" fill="#b4561f" />
+  <!-- Bottom Right Sage Sparkle -->
+  <path d="M 475 295 Q 475 302 482 302 Q 475 302 475 309 Q 475 302 468 302 Q 475 302 475 295 Z" fill="#758c79" />
+
+  <!-- Botanical Leaf Accent (Bottom Right) -->
+  <g transform="translate(485, 355)">
+    <ellipse cx="6" cy="18" rx="4" ry="12" fill="#758c79" transform="rotate(-5 6 18)" />
+    <ellipse cx="16" cy="22" rx="3.5" ry="9" fill="#a47253" transform="rotate(25 16 22)" />
+  </g>
+
+  <!-- Laptop Device in Center -->
+  <g transform="translate(230, 230)" filter="url(#laptopShadow)">
+    <!-- Laptop Screen Outer (Rounded bezel) -->
+    <rect x="0" y="0" width="195" height="132" rx="12" fill="#2d170e" stroke="#422519" stroke-width="2" />
+    
+    <!-- Screen Header dots -->
+    <circle cx="16" cy="14" r="3" fill="#e0714b" />
+    <circle cx="25" cy="14" r="3" fill="#dfbe6b" />
+    
+    <!-- "Skill progress" Title -->
+    <text x="16" y="32" fill="#f6eee6" font-family="'Instrument Sans', sans-serif" font-size="9.5" font-weight="700" letter-spacing="0.2">Skill progress</text>
+    
+    <!-- Skill Rows -->
+    <!-- Row 1: Frontend -->
+    <text x="16" y="47" fill="#bdafa4" font-family="'Instrument Sans', sans-serif" font-size="8">Frontend</text>
+    <rect x="54" y="42" width="60" height="5" rx="2.5" fill="#422519" />
+    <rect x="54" y="42" width="51" height="5" rx="2.5" fill="#b96f4b" /> <!-- 85% -->
+
+    <!-- Row 2: Backend -->
+    <text x="16" y="59" fill="#bdafa4" font-family="'Instrument Sans', sans-serif" font-size="8">Backend</text>
+    <rect x="54" y="54" width="60" height="5" rx="2.5" fill="#422519" />
+    <rect x="54" y="54" width="41" height="5" rx="2.5" fill="#85885b" /> <!-- 68% -->
+
+    <!-- Row 3: Databases -->
+    <text x="16" y="71" fill="#bdafa4" font-family="'Instrument Sans', sans-serif" font-size="8">Databases</text>
+    <rect x="54" y="66" width="60" height="5" rx="2.5" fill="#422519" />
+    <rect x="54" y="66" width="33" height="5" rx="2.5" fill="#c48a52" /> <!-- 55% -->
+
+    <!-- Row 4: DSA -->
+    <text x="16" y="83" fill="#bdafa4" font-family="'Instrument Sans', sans-serif" font-size="8">DSA</text>
+    <rect x="54" y="78" width="60" height="5" rx="2.5" fill="#422519" />
+    <rect x="54" y="78" width="27" height="5" rx="2.5" fill="#b96f4b" /> <!-- 45% -->
+
+    <!-- Circular Gauge on Right of Laptop Screen -->
+    <g transform="translate(155, 63)">
+      <circle cx="0" cy="0" r="17" fill="none" stroke="#422519" stroke-width="4.5" />
+      <circle cx="0" cy="0" r="17" fill="none" stroke="#c48a52" stroke-width="4.5"
+              stroke-dasharray="106" stroke-dashoffset="34" stroke-linecap="round" transform="rotate(-90)" />
+      <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-family="'Instrument Sans', sans-serif" font-size="9" font-weight="700">68%</text>
+    </g>
+
+    <!-- Laptop Base / Hinge / Keyboard Deck -->
+    <path d="M -16 132 L 211 132 C 215 132, 217 135, 214 138 L 195 146 C 193 147, 190 148, 185 148 L 10 148 C 5 148, 2 147, 0 146 L -19 138 C -22 135, -20 132, -16 132 Z" fill="#dfd0c0" />
+    <rect x="75" y="133" width="45" height="3" rx="1.5" fill="#baaba0" />
+  </g>
+
+  <!-- Floating Pill Badge 1 (Top Left): Target Role -->
+  <g class="badge-anim-1">
+    <g transform="translate(178, 175)" filter="url(#badgeShadow)">
+      <rect x="0" y="0" width="112" height="36" rx="18" fill="#ffffff" />
+      <!-- Gold Star Circle Icon -->
+      <circle cx="18" cy="18" r="11" fill="#f8ecd8" />
+      <path d="M 18 12.5 L 19.5 16 L 23.2 16.3 L 20.3 18.6 L 21.3 22.2 L 18 20.2 L 14.7 22.2 L 15.7 18.6 L 12.8 16.3 L 16.5 16 Z" fill="#d49439" />
+      <!-- Texts -->
+      <text x="35" y="15" fill="#8f7c70" font-family="'Instrument Sans', sans-serif" font-size="8" font-weight="500">Target role</text>
+      <text x="35" y="26" fill="#2d170e" font-family="'Instrument Sans', sans-serif" font-size="10" font-weight="700">Full-Stack Dev</text>
+    </g>
+  </g>
+
+  <!-- Floating Pill Badge 2 (Mid Left): Angular 80% -->
+  <g class="badge-anim-2">
+    <g transform="translate(135, 260)" filter="url(#badgeShadow)">
+      <rect x="0" y="0" width="98" height="36" rx="18" fill="#ffffff" />
+      <!-- Code Bracket Icon Circle -->
+      <circle cx="18" cy="18" r="11" fill="#fae8dc" />
+      <text x="18" y="22" text-anchor="middle" fill="#b4561f" font-family="'Instrument Sans', sans-serif" font-size="10.5" font-weight="700">&lt;/&gt;</text>
+      <!-- Texts -->
+      <text x="35" y="15" fill="#8f7c70" font-family="'Instrument Sans', sans-serif" font-size="8" font-weight="500">Angular</text>
+      <text x="35" y="26" fill="#2d170e" font-family="'Instrument Sans', sans-serif" font-size="10" font-weight="700">80% done</text>
+    </g>
+  </g>
+
+  <!-- Floating Pill Badge 3 (Mid Right): Projects 4 of 5 -->
+  <g class="badge-anim-3">
+    <g transform="translate(425, 275)" filter="url(#badgeShadow)">
+      <rect x="0" y="0" width="102" height="36" rx="18" fill="#ffffff" />
+      <!-- Green Check Circle Icon -->
+      <circle cx="18" cy="18" r="11" fill="#e7efe9" />
+      <path d="M 13.5 18 L 17 21.5 L 22.5 15" stroke="#487554" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <!-- Texts -->
+      <text x="35" y="15" fill="#8f7c70" font-family="'Instrument Sans', sans-serif" font-size="8" font-weight="500">Projects</text>
+      <text x="35" y="26" fill="#2d170e" font-family="'Instrument Sans', sans-serif" font-size="10" font-weight="700">4 of 5 built</text>
+    </g>
+  </g>
+</svg>
