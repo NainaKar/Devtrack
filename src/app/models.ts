@@ -74,6 +74,7 @@ export interface Activity { at: string; type: string; text: string; }
 export interface User { id: string; name: string; email: string; createdAt: string; }
 export interface UserData {
   goals: Goals;
+  needsGoals?: boolean;
   github: string;
   linkedin: string;
   resumeName: string;

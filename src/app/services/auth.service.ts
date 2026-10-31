@@ -26,6 +26,8 @@ export class AuthService {
   data = signal<UserData | null>(null);
   isLoggedIn = computed(() => !!this.user());
   saveError = signal(false);
+  needsGoals = signal(false);
+  oauthError = signal<string | null>(null);
 
   /** Guards await this promise so a page refresh restores the session before routing. */
   ready: Promise<void>;
@@ -50,11 +52,27 @@ export class AuthService {
       },
     });
 
-    // Listen for auth state changes (e.g. token refresh, logout in another tab)
-    this.supabase.auth.onAuthStateChange((event, session) => {
+    // Listen for auth state changes (e.g. token refresh, OAuth callback, logout in another tab)
+    this.supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT' || !session) {
         this.user.set(null);
         this.data.set(null);
+        this.needsGoals.set(false);
+      } else if (event === 'SIGNED_IN') {
+        if (!this.user() || this.user()?.id !== session.user.id) {
+          const su = session.user;
+          const name = (su.user_metadata?.['full_name'] as string) ||
+                       (su.user_metadata?.['name'] as string) ||
+                       su.email?.split('@')[0] ||
+                       'Developer';
+          this.user.set({
+            id: su.id,
+            name,
+            email: su.email || '',
+            createdAt: su.created_at,
+          });
+          await this.loadUserData(su.id);
+        }
       }
     });
 
@@ -74,14 +92,36 @@ export class AuthService {
   private async restore(): Promise<void> {
     if (!this.isConfigured()) return;
 
+    // Detect OAuth errors passed via URL hash or search (e.g. #error=access_denied&error_description=...)
+    try {
+      if (typeof window !== 'undefined') {
+        const hash = window.location.hash ? window.location.hash.substring(1) : '';
+        const search = window.location.search ? window.location.search.substring(1) : '';
+        const params = new URLSearchParams(hash || search);
+        const errDesc = params.get('error_description') || params.get('error') || params.get('error_code');
+        if (errDesc) {
+          const clean = decodeURIComponent(errDesc.replace(/\+/g, ' '));
+          this.oauthError.set(
+            clean.toLowerCase().includes('denied') || clean.toLowerCase().includes('cancel')
+              ? 'Google sign-in was cancelled. Please try again.'
+              : `Google sign-in failed: ${clean}`
+          );
+        }
+      }
+    } catch { /* ignore URL parse errors */ }
+
     try {
       const { data: { session }, error } = await this.supabase.auth.getSession();
       if (error || !session?.user) return;
 
       const su = session.user;
+      const name = (su.user_metadata?.['full_name'] as string) ||
+                   (su.user_metadata?.['name'] as string) ||
+                   su.email?.split('@')[0] ||
+                   'Developer';
       this.user.set({
         id: su.id,
-        name: (su.user_metadata?.['name'] as string) || su.email?.split('@')[0] || 'Developer',
+        name,
         email: su.email || '',
         createdAt: su.created_at,
       });
@@ -101,12 +141,15 @@ export class AuthService {
         .maybeSingle();
 
       if (!error && data?.data) {
-        this.data.set(data.data as UserData);
+        const ud = data.data as UserData;
+        this.data.set(ud);
+        this.needsGoals.set(!!ud.needsGoals);
         return;
       }
 
-      // If user_data row doesn't exist yet (e.g. after confirming email):
-      // Automatically initialize default profile data so the user is ready immediately.
+      // If user_data row doesn't exist yet (e.g. first-time Google sign-in):
+      // Automatically initialize default profile row with needsGoals: true so
+      // the user is directed to the career goals setup step before accessing the dashboard.
       let savedGoals: Goals = {
         roleId: 'fullstack',
         position: 'Full-Stack Web Developer',
@@ -125,6 +168,7 @@ export class AuthService {
 
       const initialData: UserData = {
         goals: savedGoals,
+        needsGoals: true,
         github: '',
         linkedin: '',
         resumeName: '',
@@ -147,12 +191,13 @@ export class AuthService {
           {
             at: new Date().toISOString(),
             type: 'register',
-            text: `Account initialized. Goal: ${savedGoals.position} at ${savedGoals.company || 'any company'}.`,
+            text: `Account initialized with Google. Set career goals to begin.`,
           },
         ],
       };
 
       this.data.set(initialData);
+      this.needsGoals.set(true);
 
       // Save initial row now that user has an authenticated session
       const { error: upsertErr } = await this.supabase
@@ -350,6 +395,105 @@ export class AuthService {
     }
   }
 
+  /**
+   * Initiates Google OAuth sign in or registration with Supabase Auth.
+   * Uses window.location.origin so redirects work automatically across localhost:4200 and Netlify.
+   */
+  async signInWithGoogle(): Promise<{ error: string | null }> {
+    if (!this.isConfigured()) {
+      return {
+        error: 'Supabase credentials not configured. Please add SUPABASE_URL and SUPABASE_ANON_KEY in src/environments/environment.ts.',
+      };
+    }
+
+    try {
+      const redirectUrl = window.location.origin + '/app/dashboard';
+      const { error } = await this.supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: redirectUrl,
+        },
+      });
+
+      if (error) {
+        console.error('Supabase signInWithOAuth error:', error);
+        return { error: error.message || 'Google sign-in failed. Please try again.' };
+      }
+
+      return { error: null };
+    } catch (e: any) {
+      console.error('Unexpected error in signInWithGoogle():', e);
+      return { error: e?.message || 'Google sign-in failed. Please try again.' };
+    }
+  }
+
+  /**
+   * Completes career goals onboarding for OAuth (Google) users.
+   * Updates user_data with target goals, clears needsGoals flag, and flushes to Supabase.
+   */
+  async completeGoals(goals: Goals): Promise<string | null> {
+    const u = this.user();
+    if (!u) return 'User session not found. Please try logging in again.';
+
+    try {
+      const cur = this.data();
+      const updatedData: UserData = {
+        ...(cur || {
+          github: '',
+          linkedin: '',
+          resumeName: '',
+          resumeUrl: '',
+          doneTopics: [],
+          projects: [],
+          chat: [],
+          activity: [],
+        }),
+        goals,
+        needsGoals: false,
+        jobs: [
+          {
+            id: 'target-initial',
+            company: goals.company || 'Dream Company',
+            role: goals.position || 'Software Engineer',
+            status: 'Preparing',
+            requiredSkills: ['Core Architecture', 'DSA', 'Portfolio Project'],
+            notes: 'Primary target set in career goals.',
+            updatedAt: new Date().toISOString(),
+          },
+        ],
+        activity: [
+          {
+            at: new Date().toISOString(),
+            type: 'register',
+            text: `Career goals calibrated: ${goals.position} at ${goals.company || 'any company'}.`,
+          },
+          ...(cur?.activity || []),
+        ],
+      };
+
+      this.data.set(updatedData);
+      this.needsGoals.set(false);
+
+      const { error } = await this.supabase
+        .from('user_data')
+        .upsert({
+          user_id: u.id,
+          data: updatedData,
+          updated_at: new Date().toISOString(),
+        });
+
+      if (error) {
+        console.error('Failed to save career goals:', error);
+        return 'Failed to save career goals: ' + error.message;
+      }
+
+      return null;
+    } catch (e: any) {
+      console.error('Error in completeGoals():', e);
+      return e?.message || 'Failed to save career goals.';
+    }
+  }
+
   async logout(): Promise<void> {
     this.update(d => d, 'logout', 'Logged out.');
     await this.flush();
@@ -360,9 +504,10 @@ export class AuthService {
       // Ignore signOut network errors
     }
 
-    await this.router.navigateByUrl('/');
     this.user.set(null);
     this.data.set(null);
+    this.needsGoals.set(false);
+    await this.router.navigateByUrl('/');
   }
 
   async deleteAccount(): Promise<void> {

@@ -2554,6 +2554,106 @@ app-home .rc .bar {
   opacity: 0.85;
 }
 
+/* Google OAuth Pill Button */
+.auth-btn-google {
+  width: 100%;
+  height: 48px;
+  min-height: 44px;
+  border-radius: 99px;
+  background-color: #ffffff;
+  border: 1px solid #e0d1b8;
+  color: #2e1a10;
+  font-family: 'Instrument Sans', var(--font-family);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, border-color 150ms ease;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  padding: 0 20px;
+}
+
+.auth-btn-google:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background-color: #ffffff;
+  border-color: #d1be9f;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+}
+
+.auth-btn-google:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.auth-btn-google:focus-visible {
+  outline: 2px solid #ecd3b8;
+  outline-offset: 2px;
+}
+
+.auth-btn-google:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.auth-google-icon {
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Spinner for Google OAuth redirecting state */
+.auth-google-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(46, 26, 16, 0.2);
+  border-top-color: #4285F4;
+  border-right-color: #34A853;
+  border-bottom-color: #FBBC05;
+  border-left-color: #EA4335;
+  border-radius: 50%;
+  animation: auth-spin 0.8s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+@keyframes auth-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Form Divider Line with "or" */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 16px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.auth-divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(248, 241, 231, 0.22);
+}
+
+.auth-divider-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(248, 241, 231, 0.65);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+  font-family: 'Instrument Sans', sans-serif;
+}
+
 /* Primary Action Pill Button */
 .auth-btn-primary {
   width: 100%;

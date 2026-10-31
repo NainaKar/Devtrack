@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { COMPANY_GROUPS, COMPANY_SUGGESTIONS, LEVELS, ROLE_GROUPS, ROLES, TIERS, TIMELINES } from '../data/roles.data';
 import { Level } from '../models';
@@ -95,6 +95,34 @@ import { Level } from '../models';
 
                 <form (ngSubmit)="next()" #f="ngForm" novalidate>
                   @if (step() === 1) {
+                    <!-- Continue with Google Button -->
+                    <button
+                      type="button"
+                      class="auth-btn-google"
+                      (click)="signInWithGoogle()"
+                      [disabled]="googleLoading() || busy()"
+                      aria-label="Continue with Google"
+                    >
+                      @if (googleLoading()) {
+                        <span class="auth-google-spinner" aria-hidden="true"></span>
+                        <span>Connecting to Google…</span>
+                      } @else {
+                        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" class="auth-google-icon">
+                          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.14-1.55.38-2.27V6.58H1.25C.45 8.16 0 9.94 0 12s.45 3.84 1.25 5.42l4.03-3.15z"/>
+                          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                        </svg>
+                        <span>Continue with Google</span>
+                      }
+                    </button>
+
+                    <div class="auth-divider" role="separator" aria-label="or register with email">
+                      <span class="auth-divider-line"></span>
+                      <span class="auth-divider-text">or</span>
+                      <span class="auth-divider-line"></span>
+                    </div>
+
                     <!-- Full Name Field -->
                     <div class="auth-field">
                       <label for="reg-name" class="auth-field-label">Full Name</label>
@@ -321,9 +349,9 @@ import { Level } from '../models';
                       <button
                         type="button"
                         class="auth-btn-secondary"
-                        (click)="step.set(1)"
+                        (click)="onBack()"
                       >
-                        ← Back
+                        {{ auth.isLoggedIn() ? '← Cancel' : '← Back' }}
                       </button>
                       <button
                         type="submit"
@@ -351,8 +379,9 @@ import { Level } from '../models';
   `,
 })
 export class Register {
-  private auth = inject(AuthService);
+  auth = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   roles = ROLES;
   roleGroups = ROLE_GROUPS;
@@ -366,6 +395,7 @@ export class Register {
   error = signal('');
   infoMessage = signal('');
   busy = signal(false);
+  googleLoading = signal(false);
   showPassword = signal(false);
 
   name = signal('');
@@ -379,6 +409,38 @@ export class Register {
   timeline = 12;
   level: Level = 'Beginner';
   hours = 10;
+
+  constructor() {
+    this.route.queryParams.subscribe(params => {
+      if (params['step'] === 'goals' || this.auth.needsGoals()) {
+        this.step.set(2);
+        const u = this.auth.user();
+        if (u?.name && !this.name()) {
+          this.name.set(u.name);
+        }
+      }
+      if (params['oauth_error']) {
+        this.error.set(params['oauth_error']);
+      }
+    });
+
+    try {
+      if (typeof window !== 'undefined') {
+        const hash = window.location.hash ? window.location.hash.substring(1) : '';
+        const search = window.location.search ? window.location.search.substring(1) : '';
+        const params = new URLSearchParams(hash || search);
+        const errDesc = params.get('error_description') || params.get('error');
+        if (errDesc) {
+          const clean = decodeURIComponent(errDesc.replace(/\+/g, ' '));
+          this.error.set(
+            clean.toLowerCase().includes('denied') || clean.toLowerCase().includes('cancel')
+              ? 'Google sign-in was cancelled. Please try again.'
+              : `Google sign-in failed: ${clean}`
+          );
+        }
+      }
+    } catch { /* ignore URL parse errors */ }
+  }
 
   isStep1Valid = computed(() => {
     const n = (this.name() || '').trim();
@@ -406,6 +468,26 @@ export class Register {
     const matched = this.roles.find(r => r.id === this.roleId);
     if (matched) {
       this.position = matched.name;
+    }
+  }
+
+  onBack() {
+    if (this.auth.isLoggedIn()) {
+      this.auth.logout();
+      return;
+    }
+    this.step.set(1);
+  }
+
+  async signInWithGoogle() {
+    this.error.set('');
+    this.infoMessage.set('');
+    this.googleLoading.set(true);
+
+    const res = await this.auth.signInWithGoogle();
+    if (res.error) {
+      this.googleLoading.set(false);
+      this.error.set(res.error);
     }
   }
 
@@ -437,6 +519,30 @@ export class Register {
     }
 
     this.busy.set(true);
+
+    // If already authenticated via OAuth (Google), complete career goals
+    if (this.auth.isLoggedIn()) {
+      const saveErr = await this.auth.completeGoals({
+        roleId: this.roleId,
+        position: this.position,
+        company: this.company.trim(),
+        timelineMonths: +this.timeline,
+        level: this.level,
+        weeklyHours: +this.hours,
+        customTier: this.customTier || undefined,
+      });
+      this.busy.set(false);
+
+      if (saveErr) {
+        this.error.set(saveErr);
+        return;
+      }
+
+      this.router.navigateByUrl('/app/dashboard');
+      return;
+    }
+
+    // Standard email registration flow
     const result = await this.auth.register(this.name(), this.email(), this.password(), {
       roleId: this.roleId,
       position: this.position,
