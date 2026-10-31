@@ -1,5 +1,7 @@
 # DevTrack — Developer Career Intelligence & Skills Platform
 
+> 🚀 **Live Demo**: [https://devtrack0.netlify.app](https://devtrack0.netlify.app)
+
 <p align="center">
   <img src="public/images/hero-welcome.jpg" alt="DevTrack Preview" width="750" style="border-radius: 16px; box-shadow: 0 16px 40px rgba(0,0,0,0.12);" />
 </p>
@@ -11,9 +13,9 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Angular-19.0-DD0031?style=flat-square&logo=angular&logoColor=white" alt="Angular 19" />
   <img src="https://img.shields.io/badge/TypeScript-5.6-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Node.js-Express-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js Express" />
   <img src="https://img.shields.io/badge/Supabase-Auth%20%26%20Postgres-3ECF8E?style=flat-square&logo=supabase&logoColor=white" alt="Supabase" />
-  <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" alt="Status" />
+  <img src="https://img.shields.io/badge/Node.js-Express%20(Local%20Fallback)-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js Express" />
+  <img src="https://img.shields.io/badge/Hosting-Netlify-00C7B7?style=flat-square&logo=netlify&logoColor=white" alt="Netlify" />
   <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License" />
 </p>
 
@@ -21,133 +23,72 @@
 
 ## 📖 Overview
 
-**DevTrack** is a modern career readiness and skill acceleration platform built for engineering students, self-taught developers, and transitioning professionals. Rather than viewing career preparation as an ambiguous checklist, DevTrack provides an intelligent, mathematical framework:
+**DevTrack** is a modern career readiness and skill acceleration platform engineered for software developers, computer science students, and career switchers. Rather than relying on unstructured tutorials or vague checklists, DevTrack provides a deterministic, data-driven readiness framework:
 
-1. **Target Calibration**: Choose your desired role (e.g., Full-Stack, Frontend, DevOps, ML/AI), target company tier (Big Tech, IT Services, or Startups), and timeline.
-2. **Diagnostic Assessment**: Track topics completed across 11 key software engineering categories and 76 core competencies.
-3. **Readiness Calculation**: A deterministic engine computes an exact job readiness score, remaining study hours adjusted for your pace, and projected completion date.
-4. **Phased Roadmap**: Automatically generates a structured, week-by-week learning plan with interleaved portfolio projects and interview prep.
-5. **AI Career Mentor**: An in-platform mentor offering context-aware recommendations, roadmap next-steps, and technical explanations.
-
----
-
-## ✨ Core Features
-
-### 🎯 1. Target Role & Company Calibration
-- **9 Engineering Roles**: Full-Stack, Frontend, Backend, DevOps & Cloud, Mobile (iOS/Android), Data Engineering, AI/Machine Learning, QA Automation, and Cybersecurity.
-- **Company Tier Adjustment**: Adapts skill weightings and interview expectations for:
-  - *Product / Big Tech* (e.g., Google, Amazon, Stripe) – high DSA, system design, and project bar.
-  - *IT Services* (e.g., Infosys, TCS, Cognizant) – communication, enterprise frameworks, core CS.
-  - *High-Growth Startups* – velocity, full-stack capability, cloud deployment.
-
-### 📊 2. Dynamic Career Readiness Engine (`engine.ts`)
-- **Formula-Driven Scoring**: Computes readiness as:
-  $$\text{Readiness} = 85\% \times \text{Weighted Skill Coverage} + 15\% \times \left(\frac{\text{Completed Projects}}{\text{Target Projects}}\right)$$
-- **Pace-Adjusted Forecast**: Calculates remaining study hours with multipliers based on student baseline (Beginner: 1.25x, Intermediate: 1.0x, Advanced: 0.8x).
-- **ETA Calculator**: Forecasts the exact week of readiness against your personal study schedule (hrs/week).
-
-### 🗺️ 3. Phased Milestone Roadmap
-- **Stage 1: Foundations**: Core language fundamentals, version control, and data structures.
-- **Stage 2: Core Specialization**: Frameworks, backend architecture, databases, APIs, and cloud infrastructure.
-- **Stage 3: Career & Interview Prep**: System design, behavioral STAR stories, live mock practice, and portfolio polish.
-- Automatically schedules portfolio project milestones between topic phases to ensure practical building.
-
-### 📚 4. 76-Competency Skill Taxonomy
-- Interactive tracker spanning:
-  - Frontend Development (HTML/CSS, modern JavaScript, Angular/React, state management)
-  - Backend Architecture (Node.js, REST/GraphQL, concurrency, microservices)
-  - Databases (PostgreSQL, MongoDB, indexing, query optimization, caching)
-  - Data Structures & Algorithms (Big-O, trees, graphs, dynamic programming)
-  - Cloud & DevOps (Docker, CI/CD, Kubernetes, AWS/GCP basics)
-  - Testing, Security, System Design, Computer Science Fundamentals, Soft Skills, and Interview Prep.
-- Each topic features high-yield summaries, core principles, study checklists, and verified external learning resources.
-
-### 💼 5. Job Application Pipeline Tracker
-- Track applications across your target companies.
-- Status stages: *Wishlist*, *Preparing*, *Applied*, *Interviewing*, *Offered*, and *Archived*.
-- Note-taking per company with required competencies checklist.
-
-### 🤖 6. AI Career Mentor
-- Interactive career assistant that reads live progress data and answers questions like:
-  - *"What should I learn next?"*
-  - *"How ready am I for Google?"*
-  - *"Explain closures and prototypes with examples"*
-  - *"Review my interview preparation schedule"*
-
-### 🎨 7. Craftsmanship & Visual Design
-- **Editorial Typography**: Pairing Google Font `Fraunces` (high-contrast display serif) with `Instrument Sans` and `Caveat` handwritten accents.
-- **Modern Color System**: Forest green canvas (`#264a3a`), warm cream surfaces (`#f8f1e7`), terracotta actions (`#b4561f`), and peach highlights (`#f0c9ad`).
-- **Floating Glass Pill Navigation**: Floating curved sidebar with interactive inverted-radius active tabs, responsive collapse states, and mobile overlay drawer.
-- **Responsive Layout**: Seamlessly adapted for 1920×1080 desktops, laptops (1366×768), tablets, and mobile (390px iPhone).
+1. **Target Calibration**: Choose from **28 software engineering roles** across 6 domains, benchmark against **45 target companies** (Big Tech, Indian Unicorns, IT Services, and High-Growth Startups), and define your study schedule.
+2. **Diagnostic Competency Tracking**: Audit progress across 11 computer science and software engineering domains and 76 curated competency topics.
+3. **Deterministic Readiness Engine**: Calculates real-time role readiness percentage, pace-adjusted remaining study hours, and targeted job-ready completion dates.
+4. **Adaptive Milestone Roadmap**: Auto-generates a phased, week-by-week study roadmap with interleaved portfolio projects and interview preparation checkpoints.
+5. **Interactive Showcase & AI Mentor**: Includes an animated 30-second product tour and a context-aware AI career mentor informed by your active goals and completed topics.
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## 🎨 Craftsmanship & Visual Design System
 
-| Layer | Technology | Details |
+DevTrack features a distinctive, high-taste visual design built with custom CSS tokens:
+
+- **Color Palette**:
+  - **Cream Canvas (`#efe6d4`)**: Warm, low-fatigue primary background across all logged-in workspace views.
+  - **Rust Accent (`#b4561f`)**: Primary interaction token for call-to-actions, progress fills, badges, and focus indicators.
+  - **Dark Brown (`#3f1f12`)**: High-contrast anchor color for floating command rails, hero cards, and the 4-column footer.
+  - **Verdigris Green Band (`#264a3a`)**: Editorial section band highlighting target engineering roles and completion states.
+  - **Warm Ivory (`#fbf7ee` / `#fbf6ea`)**: Card and surface background token with restrained, organic shadows.
+- **Typography**:
+  - **Headlines & Display**: Google Font **Gloock** (with **Ghilbe** and **Fraunces** fallbacks) for high-contrast display serif typography on the marketing landing page and stat numbers.
+  - **App Workspace**: **Space Grotesk** and **IBM Plex Sans** (with **Instrument Sans** fallback) for precise, readable developer dashboards, tables, and command rail labels.
+- **Floating Command Rail Sidebar**:
+  - Floating, rounded navigation rail that expands on hover or keyboard focus (76px collapsed to 322px expanded), smoothly shifting adjacent content via sibling selectors.
+  - Features an inverted-radius cutout tab joining effect in the cream background color (`#efe6d4`), a pin/unpin toggle button with state persisted to `localStorage`, and collapses into an accessible mobile bottom dock with safe-area inset support on screens $\le 1000\text{px}$.
+- **Animated 30-Second Product Tour**:
+  - An interactive, tabbed showcase on the landing page simulating live platform workflows (Target calibration, Skill audit, Roadmap pacing, What-if readiness testing, Job tracking, and AI mentor guidance) with live count-up metrics.
+- **Responsive Layout**:
+  - Fully responsive across desktop (1920×1080), laptop (1366×768), tablet (768px), and mobile viewports (down to 360px) with minimum 44×44px tap targets and zero sideways scrolling.
+
+---
+
+## 🎯 Supported Roles & Target Companies
+
+### 28 Engineering Roles Across 6 Domains (`src/app/data/roles.data.ts`)
+
+| Domain | Roles Included |
+|---|---|
+| **Web Development** (8) | Frontend Developer, Backend Developer, Full-Stack Web Developer, Angular Developer, React Developer, Python Developer, Java Backend Developer, .NET Developer |
+| **Mobile Development** (3) | Android Developer, iOS Developer, Cross-Platform Mobile Developer (Flutter / React Native) |
+| **Data, AI & Machine Learning** (6) | AI / ML Engineer, Data Scientist, Data Engineer, Data Analyst, MLOps Engineer, Generative AI Engineer |
+| **Cloud, DevOps & Infrastructure** (4) | DevOps / Cloud Engineer, Site Reliability Engineer (SRE), Cloud Architect, Database Administrator (DBA) |
+| **Cybersecurity & Systems** (3) | Cybersecurity Analyst, Penetration Tester, Embedded Systems Engineer |
+| **Software Engineering & Specialized** (4) | Software Engineer (SDE), QA / Test Automation Engineer, Game Developer, Blockchain Developer |
+
+### 45 Target Companies & Presets Across 4 Tiers
+
+- **Global Product & Big Tech** (19): Google, Microsoft, Amazon, Meta, Apple, Netflix, Adobe, Atlassian, Uber, Stripe, Nvidia, Salesforce, Oracle, SAP, Intel, Qualcomm, Walmart Global Tech, Goldman Sachs, JPMorgan Chase.
+- **Indian Product & Unicorns** (13): Zoho, Freshworks, Razorpay, Flipkart, Swiggy, Zomato, PhonePe, Paytm, CRED, Meesho, Groww, Postman, BrowserStack.
+- **Service & Consulting** (9): TCS, Infosys, Wipro, HCLTech, Cognizant, Accenture, Capgemini, Tech Mahindra, LTIMindtree.
+- **Startups & Custom** (4): Early-stage Startup, Seed / Series-A Startup, Y Combinator Startup, Other / Custom Company.
+
+---
+
+## 🛠️ Architecture & Backend Services
+
+| Layer | Implementation | Details |
 |---|---|---|
-| **Frontend Framework** | **Angular 19** | Standalone Components, `ChangeDetectionStrategy.OnPush` |
-| **Reactivity** | **Angular Signals** | `signal()`, `computed()`, fine-grained reactive state without boilerplate |
-| **Control Flow** | **Native Angular Syntax** | `@if`, `@for (...; track ...)`, `@switch` |
-| **Routing & Protection** | **Angular Router** | Route-level lazy loading (`loadComponent`), functional `CanActivateFn` guards (`authGuard`, `guestGuard`) |
-| **Styling** | **Vanilla Modern CSS** | CSS Custom Properties, flexbox/grid, backdrop-filter glassmorphism, responsive container rules |
-| **Database & Auth** | **Supabase (PostgreSQL)** | Supabase Auth with client anon key, Row Level Security (RLS) policies for user data isolation |
-| **Alternative Backend** | **Node.js + Express** | Optional local API with bcrypt password hashing, JWT bearer tokens, atomic JSON storage |
+| **Frontend Framework** | **Angular 19** | Standalone components, `ChangeDetectionStrategy.OnPush`, Native control flow (`@if`, `@for`, `@switch`) |
+| **Reactivity** | **Angular Signals** | `signal()`, `computed()`, fine-grained reactive state without RxJS boilerplate |
+| **Production Database & Auth** | **Supabase (PostgreSQL)** | Supabase Auth (JWT bearer sessions) + PostgreSQL database with strict **Row-Level Security (RLS)** policies guaranteeing per-user data isolation |
+| **Local Development API** | **Node.js + Express** | Optional legacy local backend (`server/index.js`) providing mock endpoints and atomic JSON file persistence |
+| **Deployment & CDN** | **Netlify** | Continuous deployment from GitHub with client-side SPA redirect routing |
 
----
-
-## 📁 Repository Structure
-
-```text
-devtrack/
-├── public/                       # Static public assets & vector graphics
-│   ├── images/                   # Screenshots, illustrations & brand assets
-│   │   ├── devtrack-login-illustration.svg
-│   │   ├── hero-welcome.jpg
-│   │   └── features-dashboard.jpg
-│   └── _redirects                # SPA redirect configuration for deployment
-├── server/                       # Node.js + Express backend service
-│   ├── index.js                  # Express API routes (Auth, User Data, Health)
-│   └── data/                     # Local JSON storage fallback (git-ignored)
-├── src/
-│   ├── app/
-│   │   ├── data/                 # Canonical taxonomy data (roles, skills, topics)
-│   │   │   ├── roles.data.ts     # 9 engineering roles & company weight profiles
-│   │   │   └── skills.data.ts    # 11 categories, 76 competencies, project ideas
-│   │   ├── guards/               # Route security guards (auth.guard.ts)
-│   │   ├── layouts/              # Multi-layout routing architecture
-│   │   │   ├── app-layout.ts     # Floating glass pill authenticated sidebar
-│   │   │   └── public-layout.ts  # Landing page navbar & footer
-│   │   ├── pages/                # Route components (lazy-loaded)
-│   │   │   ├── home.ts           # Product landing experience & interactive tour
-│   │   │   ├── login.ts          # Authenticated login with organic wave shell
-│   │   │   ├── register.ts       # 2-step registration & career goal setup
-│   │   │   ├── dashboard.ts      # Core progress hub, gauge & quick actions
-│   │   │   ├── skills.ts         # 11 category cards & competency breakdown
-│   │   │   ├── skill-detail.ts   # Topic deep-dive, summaries & toggle checks
-│   │   │   ├── roadmap.ts        # Chronological multi-stage milestone plan
-│   │   │   ├── calculator.ts     # What-if readiness simulation calculator
-│   │   │   ├── jobs.ts           # Kanban application pipeline tracker
-│   │   │   ├── projects.ts       # Portfolio project builder & milestone tracker
-│   │   │   ├── chat.ts           # AI career mentor conversation interface
-│   │   │   ├── activity.ts       # Audit log of career preparation milestones
-│   │   │   └── profile.ts        # Account management & career goal tuning
-│   │   ├── services/             # Reactive signal services
-│   │   │   ├── auth.service.ts   # Supabase authentication & user profile sync
-│   │   │   ├── tracker.service.ts# Computed readiness metrics & topic signals
-│   │   │   └── chat.service.ts   # AI mentor intelligence engine
-│   │   ├── engine.ts             # Pure mathematical analysis algorithm
-│   │   └── models.ts             # Shared TypeScript domain interfaces
-│   ├── environments/             # Environment configuration (Supabase URL/Key)
-│   ├── index.html                # HTML5 root with Fraunces & Instrument Sans
-│   ├── main.ts                   # Angular application bootstrap
-│   └── styles.css                # Global design system tokens & utility classes
-├── supabase/
-│   └── schema.sql                # PostgreSQL DDL schema & Row-Level Security rules
-├── angular.json                  # Angular CLI configuration
-├── package.json                  # Project dependencies & scripts
-└── tsconfig.json                 # TypeScript compiler options
-```
+> **Note on Backend**: In production (and when configured with Supabase credentials), DevTrack communicates directly with **Supabase Auth and PostgreSQL** through `@supabase/supabase-js`. The Express server located in `server/` is a legacy local fallback.
 
 ---
 
@@ -164,11 +105,11 @@ cd Devtrack
 npm install
 ```
 
-### 2. Configure Environment (Optional Supabase Backend)
-DevTrack is pre-configured to connect to Supabase. If configuring your own Supabase instance:
+### 2. Configure Environment (Supabase)
+DevTrack is pre-configured to communicate with Supabase. To connect your own Supabase project:
 1. Create a project at [supabase.com](https://supabase.com).
-2. Run the SQL script located in `supabase/schema.sql` in the Supabase SQL Editor.
-3. Update `src/environments/environment.ts` with your project URL and public anon key:
+2. Execute the database script in `supabase/schema.sql` via the Supabase SQL Editor (creates tables and RLS security policies).
+3. Update `src/environments/environment.ts` (and `environment.development.ts`):
 ```typescript
 export const environment = {
   production: false,
@@ -179,41 +120,69 @@ export const environment = {
 
 ### 3. Run the Development Server
 ```bash
-# Starts both the Express backend on port 3000 and the Angular dev server on port 4200:
 npm start
 ```
-Open **[http://localhost:4200](http://localhost:4200)** in your browser.
+`npm start` utilizes `concurrently` to spin up both the local Express fallback server and the Angular live-reload server:
+- **Angular Web Client**: [http://localhost:4200](http://localhost:4200) (configured with proxy forwarding)
+- **Express Local API**: [http://localhost:3000](http://localhost:3000)
 
-### 4. Build for Production
+Alternatively, to run only the Angular development client:
 ```bash
-# Compiles the optimized Angular application:
-npm run build
-
-# Runs production build on a unified server (port 3000):
-npm run serve:prod
+npm run dev
+# or: npx ng serve
 ```
 
 ---
 
-## 📐 The Readiness Algorithm in Detail
+## 🌐 Production Build & Deployment
 
-The core calculation in `src/app/engine.ts` is purely functional and free of framework dependencies, making it directly testable:
+DevTrack is configured for static hosting on **Netlify** with single-page application (SPA) routing:
 
-1. **Category Weighting**: Each role defines a baseline completion ratio per skill category:
+### 1. Build the Production Bundle
+```bash
+npm run build
+# or: npx ng build
+```
+- Compiles optimized JavaScript/CSS bundles into the publish directory:
+  ```text
+  dist/devtrack/browser
+  ```
+
+### 2. Single-Page Application (SPA) Routing
+The `public/_redirects` file is copied to the root of the publish directory during compilation:
+```text
+/*    /index.html   200
+```
+This ensures all deep links (`/app/dashboard`, `/app/skills`, `/about`, `/login`, etc.) correctly route to `index.html` without 404 errors on browser refresh.
+
+### 3. Continuous Deployment via Netlify
+- Connect your GitHub repository (`NainaKar/Devtrack`) in the Netlify Dashboard.
+- **Build command**: `npm run build`
+- **Publish directory**: `dist/devtrack/browser` (or `dist/devtrack` depending on Angular CLI output path)
+- Pushing to branch `main` automatically triggers a zero-downtime deployment.
+
+---
+
+## 📐 The Readiness Algorithm (`src/app/engine.ts`)
+
+The readiness calculation is purely functional and mathematically deterministic:
+
+1. **Category Weighting**:
    $$\text{Coverage}_c = \min\left(1.0, \frac{\text{Completed Topics}_c}{\lceil \text{Weight}_{r,c} \times \text{Total Topics}_c \rceil}\right)$$
-2. **Company Tier Modifiers**:
-   - Big Tech targets increase required DSA and Interview weights to $\ge 0.9$ and add $+1$ required portfolio project.
-   - Startups increase Cloud & DevOps requirements and emphasize full-stack delivery.
-3. **Pace Factor**:
+2. **Formula-Driven Readiness**:
+   $$\text{Readiness} = 85\% \times \text{Weighted Skill Coverage} + 15\% \times \left(\frac{\text{Completed Projects}}{\text{Target Projects}}\right)$$
+3. **Pace Factor & Study Hours Forecast**:
    $$\text{Adjusted Hours} = \sum (\text{Unfinished Required Topic Hours}) \times \text{Pace Factor} + (\text{Projects Left} \times 15\text{h} \times \text{Pace Factor})$$
-4. **Timeline Feasibility**:
-   $$\text{Estimated Weeks} = \frac{\text{Adjusted Hours}}{\text{Weekly Hours}}$$
+   *(Beginner: 1.25×, Intermediate: 1.0×, Advanced: 0.8×)*
+4. **Estimated Completion Date (ETA)**:
+   $$\text{Estimated Weeks} = \frac{\text{Adjusted Hours}}{\text{Weekly Study Availability (hrs)}}$$
    A user is flagged as "On Track" when $\frac{\text{Estimated Weeks}}{4.345} \le \text{Target Timeline in Months}$.
 
 ---
 
-## 📄 License & Credits
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 - **Author**: Naina Kar
-- **Project**: DevTrack Student Platform
-- **License**: MIT License – open for educational and personal career advancement use.
+- **Project**: DevTrack Developer Competency & Career Intelligence Platform

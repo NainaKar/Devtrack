@@ -70,3 +70,7 @@ verify_fix.js
 *.test.js
 test-results/
 playwright-report/
+
+# Agent instructions and rules
+.agents/
+GEMINI.md
