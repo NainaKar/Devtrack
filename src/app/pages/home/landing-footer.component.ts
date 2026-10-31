@@ -10,9 +10,6 @@ import { RevealDirective } from '../../directives/reveal.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="footer-root" role="contentinfo">
-      <!-- Background Faint Giant Wordmark -->
-      <div class="faint-wordmark" aria-hidden="true">DevTrack</div>
-
       <div class="w">
         <div class="footer-grid">
           <!-- Column 1: Brand -->
@@ -84,6 +81,11 @@ import { RevealDirective } from '../../directives/reveal.directive';
           </div>
         </div>
 
+        <!-- Big "DevTrack" Wordmark in the Middle -->
+        <div class="footer-wordmark-row" appReveal revealDelay="0.25s">
+          <div class="middle-wordmark" aria-hidden="true">DevTrack</div>
+        </div>
+
         <!-- Bottom Bar -->
         <div class="bottom-bar" appReveal revealDelay="0.32s">
           <span class="copyright">© {{ currentYear }} DevTrack</span>
@@ -121,41 +123,12 @@ import { RevealDirective } from '../../directives/reveal.directive';
 
     .footer-root {
       position: relative;
-      background: linear-gradient(180deg, #3f1f12 0%, #2a150c 100%);
-      border-top: 3px solid #b4561f;
+      background: linear-gradient(180deg, #264a3a 0%, #1a3428 100%);
+      border-top: 3px solid #ecd3b8;
       border-radius: 40px 40px 0 0;
       overflow: hidden;
       color: #f6eddc;
       box-sizing: border-box;
-    }
-
-    .faint-wordmark {
-      position: absolute;
-      bottom: -0.16em;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: var(--fh, 'Ghilbe', 'Gloock', Georgia, serif);
-      font-size: clamp(72px, 18vw, 240px);
-      font-weight: 700;
-      color: rgba(246, 237, 220, .06);
-      line-height: 0.8;
-      letter-spacing: -0.02em;
-      user-select: none;
-      pointer-events: none;
-      white-space: nowrap;
-      z-index: 0;
-      animation: driftUp 1.2s cubic-bezier(.2, .7, .2, 1) forwards;
-    }
-
-    @keyframes driftUp {
-      from {
-        transform: translate(-50%, 18px);
-        opacity: 0;
-      }
-      to {
-        transform: translate(-50%, 0);
-        opacity: 1;
-      }
     }
 
     .w {
@@ -171,7 +144,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
       display: grid;
       grid-template-columns: 1.4fr 1fr 1fr 1fr;
       gap: 48px;
-      margin-bottom: 56px;
+      margin-bottom: 24px;
     }
 
     .footer-col {
@@ -213,7 +186,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
     }
 
     .brand-tagline {
-      color: rgba(246, 237, 220, .65);
+      color: rgba(246, 237, 220, .7);
       font-size: 14.5px;
       line-height: 1.55;
       margin: 0 0 20px;
@@ -233,9 +206,9 @@ import { RevealDirective } from '../../directives/reveal.directive';
       text-decoration: none !important;
       min-height: 44px;
       width: fit-content;
-      border: 0;
+      border: 1px solid rgba(246, 237, 220, .25) !important;
       cursor: pointer;
-      transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+      transition: transform .15s ease, background .15s ease, box-shadow .15s ease, border-color .15s ease;
     }
 
     .primary-btn:hover {
@@ -243,6 +216,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
       color: #ffffff !important;
       transform: translateY(-2px);
       box-shadow: 0 6px 18px rgba(0, 0, 0, .28);
+      border-color: rgba(246, 237, 220, .4) !important;
     }
 
     .col-heading {
@@ -251,7 +225,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
       font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: #f6eddc;
+      color: #ecd3b8;
       margin: 0 0 16px;
     }
 
@@ -298,7 +272,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
     }
 
     .footer-col-nav .footer-link-text {
-      color: rgba(246, 237, 220, .65);
+      color: rgba(246, 237, 220, .85);
       cursor: default;
     }
 
@@ -306,6 +280,33 @@ import { RevealDirective } from '../../directives/reveal.directive';
     button:focus-visible {
       outline: 2px solid #ecd3b8;
       outline-offset: 3px;
+    }
+
+    /* Big "DevTrack" Wordmark in the Middle */
+    .footer-wordmark-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin: 24px 0;
+      overflow: hidden;
+    }
+
+    .middle-wordmark {
+      font-family: var(--fh, 'Ghilbe', 'Gloock', Georgia, serif);
+      font-size: clamp(64px, 16vw, 220px);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-align: center;
+      color: rgba(246, 237, 220, .09);
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
+      transition: color .3s ease;
+    }
+
+    .footer-root:hover .middle-wordmark {
+      color: rgba(246, 237, 220, .14);
     }
 
     /* Bottom Bar */
@@ -316,9 +317,9 @@ import { RevealDirective } from '../../directives/reveal.directive';
       flex-wrap: wrap;
       gap: 16px;
       padding-top: 24px;
-      border-top: 1px solid rgba(246, 237, 220, .15);
+      border-top: 1px solid rgba(246, 237, 220, .18);
       font-size: 14px;
-      color: rgba(246, 237, 220, .65);
+      color: rgba(246, 237, 220, .7);
     }
 
     .ship-note {
@@ -331,8 +332,8 @@ import { RevealDirective } from '../../directives/reveal.directive';
       min-width: 44px;
       min-height: 44px;
       border-radius: 50%;
-      background: rgba(246, 237, 220, .1);
-      border: 1px solid rgba(246, 237, 220, .2);
+      background: #1e3d30;
+      border: 1px solid #f6eddc;
       color: #f6eddc;
       display: grid;
       place-items: center;
@@ -342,8 +343,8 @@ import { RevealDirective } from '../../directives/reveal.directive';
 
     .back-to-top-btn:hover {
       transform: translateY(-3px);
-      background: #b4561f;
-      border-color: #b4561f;
+      background: #34634e;
+      border-color: #ffffff;
       color: #ffffff;
     }
 
@@ -352,7 +353,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
       .footer-grid {
         grid-template-columns: 1fr 1fr;
         gap: 36px;
-        margin-bottom: 44px;
+        margin-bottom: 24px;
       }
     }
 
@@ -389,6 +390,12 @@ import { RevealDirective } from '../../directives/reveal.directive';
       .footer-col-nav a:hover::after {
         transform: translateX(-50%) scaleX(1);
       }
+      .footer-wordmark-row {
+        margin: 16px 0 20px;
+      }
+      .middle-wordmark {
+        font-size: clamp(48px, 18vw, 96px);
+      }
       .bottom-bar {
         flex-direction: column;
         gap: 14px;
@@ -408,9 +415,9 @@ import { RevealDirective } from '../../directives/reveal.directive';
       .back-to-top-btn:hover {
         transform: none !important;
       }
-      .faint-wordmark {
+      .footer-wordmark-row {
         opacity: 1 !important;
-        transform: translateX(-50%) !important;
+        transform: none !important;
       }
     }
   `]
