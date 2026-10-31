@@ -63,3 +63,10 @@ Thumbs.db
 
 # Local redesign backups
 backup_dashboard_redesign/
+
+# Test artifacts & scripts
+test_reproduce.js
+verify_fix.js
+*.test.js
+test-results/
+playwright-report/
