@@ -60,3 +60,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Local redesign backups
+backup_dashboard_redesign/

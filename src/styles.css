@@ -2950,3 +2950,263 @@ app-home .rc .bar {
     text-align: center;
   }
 }
+
+
+/* ==========================================================================
+   Theme B: Command Rail Design System (Scoped to .db-shell / [data-theme="b"])
+   ========================================================================== */
+
+.db-shell,
+[data-theme="b"] {
+  --db-bg: #efe6d4;
+  --db-sf: #fbf6ea;
+  --db-ink: #2e1a10;
+  --db-mu: #7a5a47;
+  --db-ac: #b4561f;
+  --db-ac2: #ecd3b8;
+  --db-dk: #3f1f12;
+  --db-on: #f6eddc;
+  --db-ln: #e0d1b8;
+  --db-gr: #264a3a;
+  --db-fd: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --db-fb: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --db-r: 8px;
+
+  box-sizing: border-box;
+  background: var(--db-bg);
+  color: var(--db-ink);
+  font-family: var(--db-fb);
+  min-height: 100vh;
+}
+
+.db-shell *,
+.db-shell *::before,
+.db-shell *::after {
+  box-sizing: border-box;
+}
+
+.db-shell h1,
+.db-shell h2,
+.db-shell h3 {
+  font-family: var(--db-fd);
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--db-ink);
+}
+
+.db-shell .num {
+  font-family: var(--db-fd);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--db-ink);
+}
+
+/* Base Card Style */
+.db-shell .card,
+.db-shell .db-card {
+  background: var(--db-sf);
+  border: 1px solid var(--db-ln);
+  border-top: 3px solid var(--db-ac);
+  border-radius: var(--db-r);
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  transition: transform .3s cubic-bezier(.2, .7, .2, 1), box-shadow .3s cubic-bezier(.2, .7, .2, 1);
+}
+
+.db-shell .card::before,
+.db-shell .db-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgba(180, 86, 31, .13), transparent 60%);
+  opacity: 0;
+  transition: opacity .3s;
+  pointer-events: none;
+}
+
+.db-shell .card:hover,
+.db-shell .db-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px rgba(63, 31, 18, .12);
+}
+
+.db-shell .card:hover::before,
+.db-shell .db-card:hover::before {
+  opacity: 1;
+}
+
+/* Button System */
+.db-shell .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: calc(var(--db-r) * .7);
+  font-weight: 600;
+  font-family: var(--db-fb);
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  white-space: nowrap;
+}
+
+.db-shell .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(180, 86, 31, .25);
+}
+
+.db-shell .btn.p,
+.db-shell .btn-primary {
+  background: var(--db-ac);
+  color: var(--db-on);
+  border-color: var(--db-ac);
+}
+
+.db-shell .btn.g,
+.db-shell .btn-secondary,
+.db-shell .btn-ghost {
+  background: var(--db-sf);
+  border: 1px solid var(--db-ln);
+  color: var(--db-ink);
+}
+
+.db-shell .btn.g:hover,
+.db-shell .btn-secondary:hover,
+.db-shell .btn-ghost:hover {
+  background: #fff;
+}
+
+.db-shell .btn-sm {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+/* Chips & Badges */
+.db-shell .chip {
+  display: inline-block;
+  background: var(--db-ac2);
+  border-radius: 99px;
+  padding: 3px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--db-dk);
+}
+
+.db-shell .chip.green,
+.db-shell .badge.green {
+  background: rgba(38, 74, 58, .15);
+  color: var(--db-gr);
+}
+
+.db-shell .chip.amber,
+.db-shell .badge.amber {
+  background: var(--db-ac2);
+  color: var(--db-dk);
+}
+
+/* Subtitles, Links & Row Helpers */
+.db-shell .sub {
+  color: var(--db-mu);
+  font-size: 13px;
+}
+
+.db-shell .muted {
+  color: var(--db-mu);
+}
+
+.db-shell .lnk {
+  color: var(--db-ac);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.db-shell .lnk:hover {
+  color: var(--db-dk);
+  text-decoration: underline;
+}
+
+/* Form Inputs in Dashboard Area */
+.db-shell input[type="text"],
+.db-shell input[type="search"],
+.db-shell input[type="number"],
+.db-shell select,
+.db-shell textarea {
+  background: var(--db-sf);
+  border: 1px solid var(--db-ln);
+  border-radius: var(--db-r);
+  padding: 10px 14px;
+  font-family: var(--db-fb);
+  font-size: 14px;
+  color: var(--db-ink);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.db-shell input:focus,
+.db-shell select:focus,
+.db-shell textarea:focus {
+  border-color: var(--db-ac);
+  box-shadow: 0 0 0 3px rgba(180, 86, 31, .15);
+}
+
+/* Keyframe Animations */
+@keyframes db-rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes db-bf {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes db-bg {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes db-rg {
+  from { --v: 0; }
+}
+
+@keyframes db-wig {
+  0%, 92%, 100% { transform: none; }
+  94% { transform: rotate(14deg); }
+  96% { transform: rotate(-12deg); }
+  98% { transform: rotate(8deg); }
+}
+
+.db-shell .rv {
+  animation: db-rise .7s cubic-bezier(.2, .7, .2, 1) backwards;
+  animation-delay: calc(var(--i, 0) * .07s);
+}
+
+.db-shell .tk i,
+.db-shell .trk i {
+  animation: db-bf 1.3s cubic-bezier(.2, .7, .2, 1) .4s backwards;
+}
+
+.db-shell .bars i {
+  animation: db-bg .8s cubic-bezier(.2, .7, .2, 1) backwards;
+  animation-delay: calc(.5s + var(--k, 0) * .04s);
+}
+
+.db-shell .ring {
+  animation: db-rg 1.6s ease-out .4s backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .db-shell *,
+  .db-shell *::before,
+  .db-shell *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
