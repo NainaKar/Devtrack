@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RevealDirective } from '../../directives/reveal.directive';
+import { ROLES } from '../../data/roles.data';
 
 @Component({
   selector: 'app-roles-band',
@@ -15,7 +16,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
         </p>
         <div class="chips">
           @for (role of roles; track role; let idx = $index) {
-            <span appReveal [revealDelay]="((idx % 4) * 0.09) + 's'">{{ role }}</span>
+            <span appReveal [revealDelay]="((idx % 6) * 0.06) + 's'">{{ role }}</span>
           }
         </div>
       </div>
@@ -56,34 +57,35 @@ import { RevealDirective } from '../../directives/reveal.directive';
     .chips {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
       margin-top: 36px;
     }
     .chips span {
-      padding: 11px 20px;
+      padding: 9px 18px;
       border-radius: 99px;
-      border: 1px solid rgba(246, 237, 220, 0.4);
-      font-size: 15px;
+      border: 1px solid rgba(246, 237, 220, 0.35);
+      font-size: 14px;
       cursor: pointer;
-      transition: background .25s, color .25s;
+      transition: background .25s, color .25s, border-color .25s;
       user-select: none;
     }
     .chips span:hover {
       background: var(--on, #f6eddc);
       color: var(--dk, #3f1f12);
+      border-color: var(--on, #f6eddc);
+    }
+    @media (max-width: 600px) {
+      .chips {
+        gap: 8px;
+        margin-top: 24px;
+      }
+      .chips span {
+        padding: 7px 14px;
+        font-size: 13px;
+      }
     }
   `]
 })
 export class RolesBandComponent {
-  roles = [
-    'Frontend Developer',
-    'Backend Developer',
-    'Full-Stack Web Developer',
-    'Python Developer',
-    'AI / ML Engineer',
-    'Data Scientist',
-    'DevOps / Cloud Engineer',
-    'Cybersecurity Analyst',
-    'Software Engineer (SDE)'
-  ];
+  roles = ROLES.map(r => r.name);
 }

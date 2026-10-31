@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { TrackerService } from '../services/tracker.service';
 import { JobApplication, JobStatus } from '../models';
+import { COMPANY_GROUPS, ROLES } from '../data/roles.data';
 
 @Component({
   selector: 'app-jobs',
@@ -156,12 +157,40 @@ import { JobApplication, JobStatus } from '../models';
             <form (ngSubmit)="saveJob()">
               <div class="form-group">
                 <label for="companyName">Company Name *</label>
-                <input id="companyName" type="text" [(ngModel)]="newCompany" name="newCompany" required placeholder="e.g. Anthropic, Google, Stripe">
+                <input
+                  id="companyName"
+                  type="text"
+                  list="jobCompanies"
+                  [(ngModel)]="newCompany"
+                  name="newCompany"
+                  required
+                  placeholder="e.g. Google, TCS, Zoho, or custom startup"
+                >
+                <datalist id="jobCompanies">
+                  @for (cg of companyGroups; track cg.group) {
+                    @for (c of cg.companies; track c) {
+                      <option [value]="c">{{ cg.group }}</option>
+                    }
+                  }
+                </datalist>
               </div>
 
               <div class="form-group">
                 <label for="jobRole">Target Role *</label>
-                <input id="jobRole" type="text" [(ngModel)]="newRole" name="newRole" required placeholder="e.g. Frontend Engineer, Full Stack Developer">
+                <input
+                  id="jobRole"
+                  type="text"
+                  list="jobRoles"
+                  [(ngModel)]="newRole"
+                  name="newRole"
+                  required
+                  placeholder="e.g. Angular Developer, SDE, Data Engineer"
+                >
+                <datalist id="jobRoles">
+                  @for (r of roles; track r.id) {
+                    <option [value]="r.name"></option>
+                  }
+                </datalist>
               </div>
 
               <div class="form-group">
@@ -422,6 +451,9 @@ export class JobsPage {
     'Offer',
     'Rejected'
   ];
+
+  roles = ROLES;
+  companyGroups = COMPANY_GROUPS;
 
   searchQuery = '';
   statusFilter = 'ALL';

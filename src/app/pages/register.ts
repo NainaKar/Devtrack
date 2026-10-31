@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { COMPANY_SUGGESTIONS, LEVELS, ROLES, TIMELINES } from '../data/roles.data';
+import { COMPANY_GROUPS, COMPANY_SUGGESTIONS, LEVELS, ROLE_GROUPS, ROLES, TIERS, TIMELINES } from '../data/roles.data';
 import { Level } from '../models';
 
 @Component({
@@ -206,8 +206,12 @@ import { Level } from '../models';
                         [(ngModel)]="roleId"
                         (ngModelChange)="onRole()"
                       >
-                        @for (r of roles; track r.id) {
-                          <option [value]="r.id">{{ r.icon }} {{ r.name }}</option>
+                        @for (g of roleGroups; track g.name) {
+                          <optgroup [label]="g.name">
+                            @for (r of g.roles; track r.id) {
+                              <option [value]="r.id">{{ r.icon }} {{ r.name }}</option>
+                            }
+                          </optgroup>
                         }
                       </select>
                     </div>
@@ -235,13 +239,31 @@ import { Level } from '../models';
                         list="companies"
                         class="auth-pill-input"
                         [(ngModel)]="company"
-                        placeholder="e.g. Stripe, Google, or startup"
+                        placeholder="e.g. Google, TCS, Zoho, or custom startup"
                       />
                       <datalist id="companies">
-                        @for (c of companies; track c) {
-                          <option [value]="c"></option>
+                        @for (cg of companyGroups; track cg.group) {
+                          @for (c of cg.companies; track c) {
+                            <option [value]="c">{{ cg.group }}</option>
+                          }
                         }
                       </datalist>
+                    </div>
+
+                    <!-- Target Company Tier -->
+                    <div class="auth-field">
+                      <label for="reg-tier" class="auth-field-label">Target Company Tier</label>
+                      <select
+                        id="reg-tier"
+                        name="tier"
+                        class="auth-pill-select"
+                        [(ngModel)]="customTier"
+                      >
+                        <option value="">Auto-detect from company</option>
+                        @for (t of tiers; track t) {
+                          <option [value]="t">{{ t }}</option>
+                        }
+                      </select>
                     </div>
 
                     <!-- Timeline & Baseline Row -->
@@ -333,9 +355,12 @@ export class Register {
   private router = inject(Router);
 
   roles = ROLES;
+  roleGroups = ROLE_GROUPS;
   timelines = TIMELINES;
   levels = LEVELS;
   companies = COMPANY_SUGGESTIONS;
+  companyGroups = COMPANY_GROUPS;
+  tiers = TIERS;
 
   step = signal(1);
   error = signal('');
@@ -350,6 +375,7 @@ export class Register {
   roleId = 'fullstack';
   position = 'Full-Stack Web Developer';
   company = '';
+  customTier = '';
   timeline = 12;
   level: Level = 'Beginner';
   hours = 10;
@@ -418,6 +444,7 @@ export class Register {
       timelineMonths: +this.timeline,
       level: this.level,
       weeklyHours: +this.hours,
+      customTier: this.customTier || undefined,
     });
     this.busy.set(false);
 

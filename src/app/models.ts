@@ -40,6 +40,7 @@ export interface Goals {
   timelineMonths: number;
   level: Level;
   weeklyHours: number;
+  customTier?: string;
 }
 export type ProjectStatus = 'Planned' | 'In progress' | 'Completed';
 export interface UserProject {

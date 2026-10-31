@@ -45,6 +45,7 @@ export const CATEGORIES: Category[] = [
       P('frontend', 'Responsive Portfolio Site', 'Beginner', ['HTML', 'CSS'], 'A mobile-first personal portfolio with a contact form and dark mode.'),
       P('frontend', 'Weather Dashboard', 'Intermediate', ['Angular', 'REST API'], 'Search cities, call a weather API, show charts and handle errors gracefully.'),
       P('frontend', 'Kanban Board', 'Advanced', ['Angular', 'Signals', 'CDK Drag&Drop'], 'Drag-and-drop boards with persistence, filtering and keyboard accessibility.'),
+      P('frontend', 'Cross-Platform Habit Tracker', 'Intermediate', ['Flutter / React Native', 'Mobile'], 'Cross-platform mobile application with offline local storage, interactive gesture controls, and responsive UI.'),
     ],
   },
   {
@@ -82,6 +83,7 @@ export const CATEGORIES: Category[] = [
       P('db', 'Library Management Schema', 'Beginner', ['SQL'], 'Design tables, constraints and 20 useful queries.'),
       P('db', 'Sales Analytics Queries', 'Intermediate', ['PostgreSQL'], 'Load a public dataset and answer business questions with joins and window functions.'),
       P('db', 'E-commerce Data Layer', 'Advanced', ['PostgreSQL', 'MongoDB', 'Redis'], 'Polyglot persistence: orders in SQL, catalog in MongoDB, cache in Redis.'),
+      P('db', 'Automated ETL Data Pipeline', 'Intermediate', ['Python', 'SQL', 'Data Pipeline'], 'Extract raw data from an API, transform and clean with SQL/pandas, and load into a normalized data warehouse.'),
     ],
   },
   {

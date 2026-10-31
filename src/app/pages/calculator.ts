@@ -2,7 +2,7 @@ import { Component, computed, HostListener, inject, signal } from '@angular/core
 import { FormsModule } from '@angular/forms';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { TrackerService } from '../services/tracker.service';
-import { ROLES, TIMELINES } from '../data/roles.data';
+import { COMPANY_GROUPS, COMPANY_SUGGESTIONS, ROLE_GROUPS, ROLES, TIERS, TIMELINES } from '../data/roles.data';
 import { analyze, etaDate, etaWeeks } from '../engine';
 
 @Component({
@@ -29,8 +29,12 @@ import { analyze, etaDate, etaWeeks } from '../engine';
           <div class="form-group" style="margin-top:16px">
             <label for="calc-role">Target Role</label>
             <select id="calc-role" [ngModel]="roleId()" (ngModelChange)="roleId.set($event)">
-              @for (r of roles; track r.id) {
-                <option [value]="r.id">{{ r.name }}</option>
+              @for (grp of roleGroups; track grp.name) {
+                <optgroup [label]="grp.name">
+                  @for (r of grp.roles; track r.id) {
+                    <option [value]="r.id">{{ r.icon }} {{ r.name }}</option>
+                  }
+                </optgroup>
               }
             </select>
           </div>
@@ -40,10 +44,28 @@ import { analyze, etaDate, etaWeeks } from '../engine';
             <input
               id="calc-company"
               type="text"
+              list="calc-cos"
               [ngModel]="company()"
               (ngModelChange)="company.set($event)"
-              placeholder="e.g. Google, Stripe, or a startup"
+              placeholder="e.g. Google, TCS, Zoho, or startup"
             />
+            <datalist id="calc-cos">
+              @for (cg of companyGroups; track cg.group) {
+                @for (c of cg.companies; track c) {
+                  <option [value]="c">{{ cg.group }}</option>
+                }
+              }
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label for="calc-tier">Company Tier</label>
+            <select id="calc-tier" [ngModel]="tier()" (ngModelChange)="tier.set($event)">
+              <option value="">Auto-detect from company</option>
+              @for (t of tiers; track t) {
+                <option [value]="t">{{ t }}</option>
+              }
+            </select>
           </div>
 
           <div class="form-group">
@@ -359,17 +381,21 @@ import { analyze, etaDate, etaWeeks } from '../engine';
 export class Calculator {
   t = inject(TrackerService);
   roles = ROLES;
+  roleGroups = ROLE_GROUPS;
   timelines = TIMELINES;
+  companyGroups = COMPANY_GROUPS;
+  tiers = TIERS;
 
   roleId = signal(this.t.goals().roleId);
   company = signal(this.t.goals().company);
+  tier = signal<string>(this.t.goals().customTier || '');
   hours = signal(this.t.goals().weeklyHours);
   timeline = signal(this.t.goals().timelineMonths);
 
   a = computed(() => {
-    const role = ROLES.find(r => r.id === this.roleId())!;
+    const role = ROLES.find(r => r.id === this.roleId()) ?? ROLES[0];
     const g = this.t.goals();
-    return analyze(role, this.company(), g.level, this.t.done(), this.t.completedProjects());
+    return analyze(role, this.company(), g.level, this.t.done(), this.t.completedProjects(), this.tier() || undefined);
   });
 
   rows = computed(() => this.a().stats.filter(s => s.needed > 0));
@@ -382,6 +408,7 @@ export class Calculator {
     const g = this.t.goals();
     this.roleId.set(g.roleId);
     this.company.set(g.company);
+    this.tier.set(g.customTier || '');
     this.hours.set(g.weeklyHours);
     this.timeline.set(g.timelineMonths);
   }

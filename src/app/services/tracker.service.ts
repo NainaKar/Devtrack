@@ -26,7 +26,7 @@ export class TrackerService {
 
   analysis = computed(() => {
     const g = this.goals();
-    return analyze(this.role(), g.company, g.level, this.done(), this.completedProjects());
+    return analyze(this.role(), g.company, g.level, this.done(), this.completedProjects(), g.customTier);
   });
 
   roadmap = computed(() => {

@@ -10,11 +10,27 @@ import { Category, Goals, Level, ProjectIdea, Role, Topic, UserData } from './mo
 
 export type Tier = 'Product / Big Tech' | 'IT Services' | 'Startup' | 'General';
 
-const PRODUCT = ['google', 'microsoft', 'amazon', 'meta', 'facebook', 'apple', 'netflix', 'adobe', 'uber', 'atlassian', 'flipkart', 'stripe', 'nvidia', 'salesforce', 'oracle'];
-const SERVICES = ['tcs', 'infosys', 'wipro', 'accenture', 'cognizant', 'capgemini', 'hcl', 'tech mahindra', 'deloitte'];
+const PRODUCT = [
+  // Global product & big tech
+  'google', 'microsoft', 'amazon', 'meta', 'facebook', 'apple', 'netflix', 'adobe',
+  'uber', 'atlassian', 'stripe', 'nvidia', 'salesforce', 'oracle', 'sap', 'intel',
+  'qualcomm', 'walmart', 'goldman', 'jpmorgan', 'jp morgan',
+  // Indian product unicorns & high-growth tech
+  'zoho', 'freshworks', 'razorpay', 'flipkart', 'swiggy', 'zomato', 'phonepe',
+  'paytm', 'cred', 'meesho', 'groww', 'postman', 'browserstack'
+];
 
-export function companyTier(company: string): Tier {
-  const c = (company || '').toLowerCase();
+const SERVICES = [
+  'tcs', 'infosys', 'wipro', 'accenture', 'cognizant', 'capgemini',
+  'hcl', 'hcltech', 'tech mahindra', 'deloitte', 'ltimindtree', 'lti mindtree'
+];
+
+export function companyTier(company: string, customTier?: Tier | string): Tier {
+  if (customTier && (customTier === 'Product / Big Tech' || customTier === 'IT Services' || customTier === 'Startup' || customTier === 'General')) {
+    return customTier;
+  }
+  const c = (company || '').toLowerCase().trim();
+  if (!c) return 'General';
   if (PRODUCT.some(p => c.includes(p))) return 'Product / Big Tech';
   if (SERVICES.some(p => c.includes(p))) return 'IT Services';
   if (c.includes('startup')) return 'Startup';
@@ -23,8 +39,8 @@ export function companyTier(company: string): Tier {
 
 export const PACE: Record<Level, number> = { Beginner: 1.25, Intermediate: 1, Advanced: 0.8 };
 
-export function weightsFor(role: Role, company: string): { w: Record<string, number>; projects: number; tier: Tier } {
-  const tier = companyTier(company);
+export function weightsFor(role: Role, company: string, customTier?: Tier | string): { w: Record<string, number>; projects: number; tier: Tier } {
+  const tier = companyTier(company, customTier);
   const w: Record<string, number> = {};
   for (const c of CATEGORIES) w[c.id] = role.weights[c.id] ?? 0;
   const raise = (id: string, v: number) => { if ((w[id] ?? 0) > 0 || id === 'dsa' || id === 'interview') w[id] = Math.max(w[id] ?? 0, v); };
@@ -55,8 +71,15 @@ export interface Analysis {
   tier: Tier;
 }
 
-export function analyze(role: Role, company: string, level: Level, done: Set<string>, projectsDone: number): Analysis {
-  const { w, projects, tier } = weightsFor(role, company);
+export function analyze(
+  role: Role,
+  company: string,
+  level: Level,
+  done: Set<string>,
+  projectsDone: number,
+  customTier?: Tier | string
+): Analysis {
+  const { w, projects, tier } = weightsFor(role, company, customTier);
   const pace = PACE[level];
   const stats: CatStat[] = CATEGORIES.map(cat => {
     const total = cat.topics.length;

@@ -2,7 +2,7 @@ import { Component, HostListener, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { TrackerService } from '../services/tracker.service';
-import { COMPANY_SUGGESTIONS, LEVELS, ROLES, TIMELINES } from '../data/roles.data';
+import { COMPANY_GROUPS, COMPANY_SUGGESTIONS, LEVELS, ROLE_GROUPS, ROLES, TIERS, TIMELINES } from '../data/roles.data';
 import { Goals, Level } from '../models';
 
 @Component({
@@ -41,8 +41,12 @@ import { Goals, Level } from '../models';
           <div class="form-group" style="margin-top:16px">
             <label for="prof-role">Desired Role Domain</label>
             <select id="prof-role" name="role" [(ngModel)]="g.roleId" (ngModelChange)="onRole()">
-              @for (r of roles; track r.id) {
-                <option [value]="r.id">{{ r.name }}</option>
+              @for (grp of roleGroups; track grp.name) {
+                <optgroup [label]="grp.name">
+                  @for (r of grp.roles; track r.id) {
+                    <option [value]="r.id">{{ r.icon }} {{ r.name }}</option>
+                  }
+                </optgroup>
               }
             </select>
           </div>
@@ -54,12 +58,24 @@ import { Goals, Level } from '../models';
 
           <div class="form-group">
             <label for="prof-co">Primary Target Company</label>
-            <input id="prof-co" name="co" type="text" list="cos" [(ngModel)]="g.company" placeholder="e.g. Google, Stripe, or a startup">
+            <input id="prof-co" name="co" type="text" list="cos" [(ngModel)]="g.company" placeholder="e.g. Google, TCS, Zoho, or custom startup">
             <datalist id="cos">
-              @for (c of companies; track c) {
-                <option [value]="c"></option>
+              @for (cg of companyGroups; track cg.group) {
+                @for (c of cg.companies; track c) {
+                  <option [value]="c">{{ cg.group }}</option>
+                }
               }
             </datalist>
+          </div>
+
+          <div class="form-group">
+            <label for="prof-tier">Company Tier</label>
+            <select id="prof-tier" name="tier" [(ngModel)]="g.customTier">
+              <option [ngValue]="undefined">Auto-detect from company</option>
+              @for (t of tiers; track t) {
+                <option [value]="t">{{ t }}</option>
+              }
+            </select>
           </div>
 
           <div class="form-group">
@@ -304,14 +320,17 @@ export class Profile {
   auth = inject(AuthService);
   t = inject(TrackerService);
   roles = ROLES;
+  roleGroups = ROLE_GROUPS;
   timelines = TIMELINES;
   levels = LEVELS;
   companies = COMPANY_SUGGESTIONS;
+  companyGroups = COMPANY_GROUPS;
+  tiers = TIERS;
 
   msg = signal('');
   g: Goals = { ...this.t.goals() };
-  github = this.t.data()!.github;
-  linkedin = this.t.data()!.linkedin;
+  github = this.t.data()?.github ?? '';
+  linkedin = this.t.data()?.linkedin ?? '';
 
   private flash(m: string) {
     this.msg.set(m);
@@ -319,7 +338,10 @@ export class Profile {
   }
 
   onRole() {
-    this.g.position = ROLES.find(r => r.id === this.g.roleId)!.name;
+    const matched = ROLES.find(r => r.id === this.g.roleId);
+    if (matched) {
+      this.g.position = matched.name;
+    }
   }
 
   saveGoals() {
