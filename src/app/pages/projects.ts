@@ -323,7 +323,7 @@ import { ProjectStatus, UserProject } from '../models';
 
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
       gap: 18px;
     }
 
@@ -374,7 +374,7 @@ import { ProjectStatus, UserProject } from '../models';
 
     .ideas-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
       gap: 18px;
     }
 
@@ -424,6 +424,33 @@ import { ProjectStatus, UserProject } from '../models';
     }
 
     @media (max-width: 640px) {
+      .hd {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin: 4px 0 18px;
+      }
+      .hd .pill-tabs {
+        width: 100%;
+      }
+      .hd .pill-tabs button {
+        flex: 1;
+        text-align: center;
+        padding: 8px 12px;
+        min-height: 40px;
+      }
+      .add-form {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .grow-input {
+        min-width: 0;
+        width: 100%;
+      }
+      .add-form button {
+        width: 100%;
+        min-height: 44px;
+      }
       .projects-grid,
       .ideas-grid {
         grid-template-columns: 1fr;
@@ -431,6 +458,12 @@ import { ProjectStatus, UserProject } from '../models';
       .controls-row {
         flex-direction: column;
         align-items: stretch;
+      }
+      .controls-row select,
+      .controls-row input,
+      .controls-row button {
+        width: 100%;
+        min-height: 40px;
       }
     }
   `],

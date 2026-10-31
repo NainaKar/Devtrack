@@ -139,6 +139,32 @@ import { RevealDirective } from '../../directives/reveal.directive';
     @media (max-width: 900px) {
       .steps {
         grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .steps > img {
+        aspect-ratio: 16/10;
+        max-height: 280px;
+      }
+    }
+    @media (max-width: 768px) {
+      .sec {
+        padding: 56px 0;
+      }
+      .w {
+        padding: 0 16px;
+      }
+      ol li {
+        grid-template-columns: 44px 1fr;
+        gap: 0 14px;
+        padding: 18px 0;
+      }
+      ol li::before {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+      }
+      ol h3 {
+        font-size: 20px;
       }
     }
   `]

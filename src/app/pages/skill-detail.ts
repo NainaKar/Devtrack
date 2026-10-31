@@ -406,6 +406,24 @@ import { CAT_BY_ID } from '../data/skills.data';
         grid-template-columns: 1fr;
       }
     }
+
+    @media (max-width: 640px) {
+      .hd {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+      .domain-stat-card {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+      }
+      .check-bubble {
+        min-width: 36px;
+        min-height: 36px;
+      }
+    }
   `],
 })
 export class SkillDetail {

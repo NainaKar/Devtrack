@@ -164,7 +164,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
     .ph.l {
       grid-column: span 2;
     }
-    @media (max-width: 900px) {
+    @media (max-width: 1024px) {
       .grid {
         grid-template-columns: 1fr 1fr;
       }
@@ -172,12 +172,27 @@ import { RevealDirective } from '../../directives/reveal.directive';
         grid-column: span 2;
       }
     }
-    @media (max-width: 560px) {
+    @media (max-width: 768px) {
+      .sec {
+        padding: 56px 0;
+      }
+      .w {
+        padding: 0 16px;
+      }
       .grid {
         grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 36px;
+      }
+      .card {
+        padding: 22px;
+        min-height: auto;
       }
       .ph, .ph.l {
-        grid-column: auto;
+        grid-column: 1 / -1;
+        width: 100%;
+        min-height: 220px;
+        aspect-ratio: 16/10;
       }
     }
   `]

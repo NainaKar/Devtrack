@@ -45,6 +45,15 @@ import { RouterLink } from '@angular/router';
       color: var(--ink, #2e1a10);
       text-decoration: underline;
     }
+    @media (max-width: 600px) {
+      .w {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+        padding: 0 16px;
+      }
+    }
   `]
 })
 export class LandingFooterComponent {

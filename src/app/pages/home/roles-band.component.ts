@@ -74,13 +74,19 @@ import { ROLES } from '../../data/roles.data';
       color: var(--dk, #3f1f12);
       border-color: var(--on, #f6eddc);
     }
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
+      .sec {
+        padding: 56px 0;
+      }
+      .w {
+        padding: 0 24px;
+      }
       .chips {
         gap: 8px;
         margin-top: 24px;
       }
       .chips span {
-        padding: 7px 14px;
+        padding: 8px 14px;
         font-size: 13px;
       }
     }

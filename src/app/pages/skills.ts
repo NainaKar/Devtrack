@@ -241,7 +241,7 @@ import { TrackerService } from '../services/tracker.service';
     /* Grid */
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
       gap: 18px;
     }
 
@@ -353,12 +353,37 @@ import { TrackerService } from '../services/tracker.service';
     }
 
     @media (max-width: 768px) {
+      .hd {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin: 4px 0 18px;
+      }
       .filter-row {
         flex-direction: column;
         align-items: stretch;
+        gap: 12px;
       }
       .search-wrap {
         width: 100%;
+      }
+      .pill-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        flex-wrap: nowrap;
+        padding-bottom: 2px;
+      }
+      .pill-tabs::-webkit-scrollbar {
+        display: none;
+      }
+      .pill-tabs button {
+        flex-shrink: 0;
+        min-height: 40px;
+      }
+      .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
       }
     }
   `],

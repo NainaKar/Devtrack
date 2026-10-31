@@ -104,13 +104,16 @@
    Base Elements & Reset
    ========================================================================== */
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -121,6 +124,15 @@ body {
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+picture,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 h1,
@@ -224,15 +236,23 @@ a:hover {
 }
 
 .g2 {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
 }
 
 .g3 {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
 }
 
 .g4 {
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+}
+
+@media (max-width: 768px) {
+  .g2,
+  .g3,
+  .g4 {
+    grid-template-columns: 1fr;
+  }
 }
 
 .stack>*+* {
@@ -548,6 +568,24 @@ textarea {
   background-color: var(--color-input-bg);
   color: var(--color-text-primary);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+@media (max-width: 768px) {
+  input[type=text],
+  input[type=email],
+  input[type=password],
+  input[type=url],
+  input[type=number],
+  input[type=search],
+  select,
+  textarea {
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+
+  .btn {
+    min-height: 44px;
+  }
 }
 
 input:focus,
@@ -2912,15 +2950,24 @@ app-home .rc .bar {
     top: 16px;
     left: 18px;
   }
+
+  .auth-shell input,
+  .auth-shell select,
+  .auth-pill-input,
+  .auth-pill-select {
+    font-size: 16px !important;
+  }
 }
 
 @media (max-width: 520px) {
   .auth-shell {
-    padding: 56px 14px 24px;
+    padding: 48px 12px 20px;
   }
 
   .auth-card-container {
-    border-radius: 22px;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 18px;
   }
 
   .auth-art-panel {

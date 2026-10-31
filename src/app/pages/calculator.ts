@@ -337,10 +337,12 @@ import { analyze, etaDate, etaWeeks } from '../engine';
 
     .table-scroll {
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .breakdown-table {
       width: 100%;
+      min-width: 500px;
       border-collapse: collapse;
       font-size: 14px;
       text-align: left;
@@ -368,6 +370,18 @@ import { analyze, etaDate, etaWeeks } from '../engine';
       }
       .stats-grid {
         grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hd {
+        margin: 4px 0 18px;
+      }
+      .control-card {
+        padding: 18px;
+      }
+      .breakdown-card {
+        padding: 16px;
       }
     }
 

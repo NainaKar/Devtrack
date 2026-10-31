@@ -554,9 +554,12 @@ interface NavItem {
       main,
       .rail:is(:hover, :focus-within, .pin) ~ main {
         padding-bottom: 110px;
-        margin-left: 0;
+        margin-left: 0 !important;
         padding-left: 16px;
         padding-right: 16px;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
       }
 
       .rail,
@@ -564,30 +567,39 @@ interface NavItem {
         top: auto;
         left: 10px;
         right: 10px;
-        bottom: 10px;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px));
         width: auto;
         height: 66px;
         flex-direction: row;
         align-items: center;
         padding: 0 8px;
         border-radius: 33px;
+        box-shadow: 0 10px 30px rgba(63, 31, 18, .35);
       }
 
       .rh,
       .rt,
       .strip,
       .rail em {
-        display: none;
+        display: none !important;
       }
 
       .rn {
         flex-direction: row;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
         flex: 1;
+        gap: 2px;
+      }
+
+      .rn::-webkit-scrollbar {
+        display: none;
       }
 
       .rf {
         flex-direction: row;
+        gap: 2px;
       }
 
       .rn a,
@@ -595,7 +607,12 @@ interface NavItem {
       .rail:is(:hover, :focus-within, .pin) :is(.rn, .rf) a {
         margin: 0 2px;
         background: none !important;
-        padding: 4px;
+        padding: 0;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .rn a.on::before,
@@ -604,7 +621,27 @@ interface NavItem {
       }
 
       .sr {
-        display: none;
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      main,
+      .rail:is(:hover, :focus-within, .pin) ~ main {
+        padding-left: 12px;
+        padding-right: 12px;
+        padding-top: 14px;
+      }
+      .top {
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .bc {
+        font-size: 13px;
+      }
+      .bell, .av {
+        width: 38px;
+        height: 38px;
       }
     }
   `],

@@ -60,6 +60,16 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
         transform: translateX(-50%);
       }
     }
+    @media (max-width: 600px) {
+      .mq {
+        padding: 14px 0;
+      }
+      .mq span {
+        font-size: 19px;
+        gap: 24px;
+        margin-right: 24px;
+      }
+    }
     @media (prefers-reduced-motion: reduce) {
       .mq-track {
         animation: none !important;

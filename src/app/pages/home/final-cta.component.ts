@@ -116,6 +116,28 @@ import { RevealDirective } from '../../directives/reveal.directive';
         padding: 28px;
       }
     }
+    @media (max-width: 768px) {
+      .sec {
+        padding: 56px 0;
+      }
+      .w {
+        padding: 0 24px;
+      }
+      .fin {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        margin-bottom: 48px;
+        border-radius: var(--r, 20px);
+      }
+      .cta {
+        flex-direction: column;
+        width: 100%;
+      }
+      .cta .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
   `]
 })
 export class FinalCtaComponent {

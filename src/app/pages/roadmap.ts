@@ -298,6 +298,16 @@ import { TrackerService } from '../services/tracker.service';
     }
 
     @media (max-width: 640px) {
+      .hd {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin: 4px 0 18px;
+      }
+      .hd .btn {
+        width: 100%;
+        text-align: center;
+      }
       .timeline-container {
         padding-left: 0;
       }
@@ -308,6 +318,16 @@ import { TrackerService } from '../services/tracker.service';
         position: static;
         margin-bottom: 10px;
         box-shadow: none;
+      }
+      .tl-card {
+        padding: 16px;
+      }
+      .tl-actions {
+        width: 100%;
+      }
+      .tl-actions .btn {
+        width: 100%;
+        text-align: center;
       }
     }
   `],

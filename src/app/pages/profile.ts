@@ -314,6 +314,41 @@ import { Goals, Level } from '../models';
         grid-template-columns: 1fr;
       }
     }
+
+    @media (max-width: 600px) {
+      .hd {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin: 4px 0 16px;
+      }
+      .completion-bar-wrap {
+        width: 100%;
+      }
+      .form-card {
+        padding: 18px 16px;
+      }
+      .level-choice {
+        gap: 6px;
+      }
+      .level-btn {
+        flex: 1;
+        min-height: 44px;
+        padding: 8px 12px;
+        text-align: center;
+      }
+      .form-card button[type="submit"] {
+        width: 100%;
+        min-height: 44px;
+      }
+      .side-stack .row {
+        flex-direction: column;
+      }
+      .side-stack .row button {
+        width: 100%;
+        min-height: 44px;
+      }
+    }
   `],
 })
 export class Profile {

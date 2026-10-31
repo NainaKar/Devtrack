@@ -290,14 +290,45 @@ import { AuthService } from '../services/auth.service';
     }
 
     @media (max-width: 600px) {
+      .hd {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin: 4px 0 16px;
+      }
       .chat-card {
-        height: calc(100vh - 200px);
+        height: calc(100dvh - 240px);
+        min-height: 420px;
+      }
+      .chat-body {
+        padding: 16px 14px;
+        gap: 12px;
       }
       .msg {
-        max-width: 95%;
+        max-width: 92%;
+        padding: 12px 14px;
       }
       .suggest-label {
         display: none;
+      }
+      .suggest-pills {
+        padding: 2px 0;
+      }
+      .suggest-btn {
+        min-height: 36px;
+        padding: 6px 14px;
+      }
+      .chat-input-bar {
+        padding: 10px 14px;
+        gap: 8px;
+      }
+      .chat-input-bar input {
+        font-size: 16px !important;
+        height: 44px;
+      }
+      .chat-input-bar button {
+        min-height: 44px;
+        padding: 0 16px;
       }
     }
   `],

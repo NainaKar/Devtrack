@@ -66,6 +66,27 @@ import { RouterLink } from '@angular/router';
       </div>
     </div>
   </section>`,
+  styles: [`
+    :host {
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .hero {
+        padding: 40px 0 !important;
+      }
+      .container {
+        padding: 0 16px;
+      }
+      .row {
+        flex-direction: column;
+        width: 100%;
+      }
+      .row .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  `],
 })
 export class About {
   values = [

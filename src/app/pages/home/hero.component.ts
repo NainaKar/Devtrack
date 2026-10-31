@@ -115,10 +115,12 @@ import { AuthService } from '../../services/auth.service';
       font-family: var(--fh, 'Ghilbe', 'Gloock', Georgia, serif);
       font-weight: 400;
       letter-spacing: -0.02em;
-      font-size: clamp(40px, 5.6vw, 72px);
+      font-size: clamp(30px, 5.6vw, 72px);
       line-height: 1.08;
       color: var(--ink, #2e1a10);
       margin: 0;
+      overflow-wrap: break-word;
+      word-break: normal;
     }
     .wd {
       display: inline-block;
@@ -348,6 +350,44 @@ import { AuthService } from '../../services/auth.service';
       }
       .hv {
         margin-bottom: 30px;
+      }
+    }
+    @media (max-width: 768px) {
+      .hero {
+        padding: 44px 0 32px;
+      }
+      .w {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding: 0 16px;
+      }
+      .hero-content h1 {
+        font-size: clamp(28px, 7.5vw, 42px);
+      }
+      .hero-content p.lead {
+        font-size: 16px;
+        margin: 16px 0 24px;
+      }
+      .cta {
+        flex-direction: column;
+        width: 100%;
+      }
+      .cta .btn {
+        width: 100%;
+        text-align: center;
+      }
+      .hv {
+        margin-bottom: 12px;
+      }
+      .rc {
+        position: relative;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        margin: -24px auto 0;
+        width: 100%;
+        max-width: 320px;
+        box-sizing: border-box;
       }
     }
     @media (prefers-reduced-motion: reduce) {

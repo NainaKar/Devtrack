@@ -310,10 +310,12 @@ import { COMPANY_GROUPS, ROLES } from '../data/roles.data';
 
     .table-scroll {
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .jobs-table {
       width: 100%;
+      min-width: 680px;
       border-collapse: collapse;
       text-align: left;
       font-size: 14px;
@@ -426,14 +428,37 @@ import { COMPANY_GROUPS, ROLES } from '../data/roles.data';
     }
 
     @media (max-width: 600px) {
+      .hd {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin: 4px 0 18px;
+      }
+      .hd .btn {
+        width: 100%;
+        text-align: center;
+      }
       .form-grid-2 {
         grid-template-columns: 1fr;
       }
       .filter-controls {
         width: 100%;
       }
+      .filter-controls select {
+        width: 100%;
+      }
       .search-wrap {
         width: 100%;
+      }
+      .modal-card {
+        padding: 18px;
+      }
+      .modal-actions {
+        flex-direction: column-reverse;
+      }
+      .modal-actions button {
+        width: 100%;
+        min-height: 44px;
       }
     }
   `],

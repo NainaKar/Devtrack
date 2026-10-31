@@ -141,6 +141,26 @@ import { TrackerService } from '../services/tracker.service';
       text-align: center;
       padding: 48px;
     }
+
+    @media (max-width: 600px) {
+      .hd {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin: 4px 0 16px;
+      }
+      .activity-card {
+        padding: 12px 16px;
+      }
+      .activity-item {
+        gap: 12px;
+        padding: 12px 0;
+      }
+      .activity-meta {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+    }
   `],
 })
 export class ActivityPage {

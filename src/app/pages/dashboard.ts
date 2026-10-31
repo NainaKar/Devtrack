@@ -419,16 +419,41 @@ import { etaDate, etaWeeks } from '../engine';
       }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 768px) {
       .st {
         grid-template-columns: 1fr;
+        gap: 14px;
       }
-      .sk > span:first-child {
-        width: 120px;
+      .bd {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .hd {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin: 4px 0 18px;
       }
       .hd-actions {
         width: 100%;
-        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .hd-actions .btn {
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+      }
+      .sk > span:first-child {
+        flex: 0 1 140px;
+        width: auto;
+        min-width: 85px;
+      }
+      .sk .tk {
+        flex: 1;
+        min-width: 50px;
+      }
+      .sk em {
+        flex: none;
       }
     }
   `],

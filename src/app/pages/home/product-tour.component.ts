@@ -572,6 +572,100 @@ import {
       text-decoration: none;
       align-self: flex-start;
     }
+    @media (max-width: 768px) {
+      .shw {
+        height: auto;
+        padding: 48px 0;
+      }
+      .stg {
+        position: static;
+        height: auto;
+        padding: 0 16px;
+        display: block;
+      }
+      .scr {
+        width: 100% !important;
+        height: 520px !important;
+        max-height: 520px !important;
+        opacity: 1 !important;
+        transform: none !important;
+        border-radius: 16px;
+      }
+      .tb {
+        padding: 8px 10px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 2px;
+      }
+      .tb::-webkit-scrollbar {
+        display: none;
+      }
+      .dots {
+        display: none;
+      }
+      .tb button {
+        padding: 8px 10px;
+        font-size: 13px;
+        min-height: 40px;
+      }
+      .sc {
+        padding: 16px 14px;
+      }
+      .sc h3 {
+        font-size: 20px;
+      }
+      .sc > p {
+        font-size: 13px;
+        margin: 4px 0 14px;
+      }
+      .rw {
+        padding: 8px 10px;
+        font-size: 13px;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .rw b {
+        min-width: 0;
+        width: 100%;
+        font-size: 13px;
+      }
+      .chp {
+        padding: 4px 10px;
+        font-size: 12px;
+      }
+      .two {
+        gap: 16px;
+      }
+      .two > div:first-child {
+        min-width: 0;
+        width: 100%;
+      }
+      .ring {
+        width: 100px;
+      }
+      .ring b {
+        font-size: 24px;
+      }
+      .kb {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .col {
+        min-height: auto;
+        padding: 8px;
+      }
+      .jc {
+        padding: 8px;
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+      .bu {
+        padding: 10px 12px;
+        font-size: 13px;
+        max-width: 100%;
+      }
+    }
     @media (max-width: 560px) {
       .rw b {
         min-width: 0;
@@ -702,6 +796,13 @@ export class ProductTourComponent implements OnInit, OnDestroy {
     const rc = document.querySelector('.rc');
 
     if (!S || !scr) return;
+
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      scr.style.opacity = '1';
+      scr.style.transform = 'none';
+      if (hv) hv.classList.remove('gone');
+      return;
+    }
 
     const scrollY = window.scrollY;
     const sOffsetTop = S.offsetTop;
