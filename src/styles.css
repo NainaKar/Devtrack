@@ -2615,6 +2615,21 @@ app-home .rc .bar {
   flex-shrink: 0;
 }
 
+/* Info & Success Alerts */
+.auth-alert-info,
+.auth-alert-success {
+  background: rgba(46, 125, 85, 0.28);
+  border: 1px solid rgba(110, 215, 155, 0.6);
+  color: #d1fae5;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  margin-bottom: 12px;
+  text-align: left;
+  flex-shrink: 0;
+}
+
 /* Right Panel Bottom Links */
 .auth-panel-footer {
   display: flex;

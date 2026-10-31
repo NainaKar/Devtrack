@@ -4,6 +4,12 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { Goals, User, UserData } from '../models';
 
+export interface RegisterResult {
+  error: string | null;
+  confirmEmail?: boolean;
+  email?: string;
+}
+
 /**
  * Supabase Authentication & Data Persistence Service.
  * - Manages user authentication (sign up, login, logout, session restoration) via Supabase Auth.
@@ -96,6 +102,69 @@ export class AuthService {
 
       if (!error && data?.data) {
         this.data.set(data.data as UserData);
+        return;
+      }
+
+      // If user_data row doesn't exist yet (e.g. after confirming email):
+      // Automatically initialize default profile data so the user is ready immediately.
+      let savedGoals: Goals = {
+        roleId: 'fullstack',
+        position: 'Full-Stack Web Developer',
+        company: '',
+        timelineMonths: 12,
+        level: 'Beginner',
+        weeklyHours: 10,
+      };
+
+      try {
+        const { data: authData } = await this.supabase.auth.getUser();
+        if (authData?.user?.user_metadata?.['goals']) {
+          savedGoals = authData.user.user_metadata['goals'] as Goals;
+        }
+      } catch { /* ignore metadata read error */ }
+
+      const initialData: UserData = {
+        goals: savedGoals,
+        github: '',
+        linkedin: '',
+        resumeName: '',
+        resumeUrl: '',
+        doneTopics: [],
+        projects: [],
+        jobs: [
+          {
+            id: 'target-initial',
+            company: savedGoals.company || 'Dream Company',
+            role: savedGoals.position || 'Software Engineer',
+            status: 'Preparing',
+            requiredSkills: ['Core Architecture', 'DSA', 'Portfolio Project'],
+            notes: 'Primary target set in career goals.',
+            updatedAt: new Date().toISOString(),
+          }
+        ],
+        chat: [],
+        activity: [
+          {
+            at: new Date().toISOString(),
+            type: 'register',
+            text: `Account initialized. Goal: ${savedGoals.position} at ${savedGoals.company || 'any company'}.`,
+          },
+        ],
+      };
+
+      this.data.set(initialData);
+
+      // Save initial row now that user has an authenticated session
+      const { error: upsertErr } = await this.supabase
+        .from('user_data')
+        .upsert({
+          user_id: userId,
+          data: initialData,
+          updated_at: new Date().toISOString(),
+        });
+
+      if (upsertErr) {
+        console.warn('Failed to insert default user_data:', upsertErr);
       }
     } catch (e) {
       console.warn('Failed to load user_data:', e);
@@ -104,11 +173,13 @@ export class AuthService {
 
   /**
    * Registers a new user with Supabase Auth and initializes their user_data row.
-   * Returns an error message string or null on success.
+   * Returns a structured RegisterResult with error, or confirmEmail flag.
    */
-  async register(name: string, email: string, password: string, goals: Goals): Promise<string | null> {
+  async register(name: string, email: string, password: string, goals: Goals): Promise<RegisterResult> {
     if (!this.isConfigured()) {
-      return 'Supabase credentials not configured. Please add your SUPABASE_URL and SUPABASE_ANON_KEY in src/environments/environment.ts.';
+      return {
+        error: 'Supabase credentials not configured. Please add SUPABASE_URL and SUPABASE_ANON_KEY in src/environments/environment.ts.',
+      };
     }
 
     try {
@@ -119,19 +190,48 @@ export class AuthService {
         email: trimmedEmail,
         password,
         options: {
-          data: { name: trimmedName },
+          data: {
+            name: trimmedName,
+            goals,
+          },
         },
       });
 
       if (error) {
-        return error.message;
+        console.error('Supabase signUp error:', error);
+        const msg = error.message || '';
+        if (error.status === 429 || msg.toLowerCase().includes('rate limit') || msg.toLowerCase().includes('too many requests')) {
+          return { error: 'Too many sign-up attempts. Please wait a few minutes before trying again.' };
+        }
+        if (msg.toLowerCase().includes('already registered') || msg.toLowerCase().includes('user already exists') || msg.toLowerCase().includes('already been taken')) {
+          return { error: 'An account with this email already exists. Please log in instead.' };
+        }
+        if (error.status === 401 || msg.toLowerCase().includes('invalid api key')) {
+          return { error: 'Authentication configuration error (Invalid Supabase API key).' };
+        }
+        return { error: msg || 'Registration failed. Please verify your details and try again.' };
       }
 
       const su = data.user;
       if (!su) {
-        return 'Registration failed. Please try again.';
+        return { error: 'Registration failed. No user was returned by authentication service.' };
       }
 
+      // Check if user already exists (Supabase anti-enumeration returns user with empty identities array)
+      if (su.identities && su.identities.length === 0) {
+        return { error: 'An account with this email already exists. Please sign in instead.' };
+      }
+
+      // Check if email confirmation is required (user returned but session is null)
+      if (!data.session) {
+        return {
+          error: null,
+          confirmEmail: true,
+          email: trimmedEmail,
+        };
+      }
+
+      // User has an active session immediately (auto-confirm enabled)
       const userObj: User = {
         id: su.id,
         name: trimmedName,
@@ -181,12 +281,18 @@ export class AuthService {
         });
 
       if (insertError) {
-        console.warn('Initial user_data insert error:', insertError);
+        console.error('Initial user_data insert error:', insertError);
+        const errMsg = insertError.message || '';
+        if (insertError.code === '42501' || errMsg.toLowerCase().includes('permission denied') || errMsg.toLowerCase().includes('row-level security')) {
+          return { error: 'Account created, but database write was denied by Row-Level Security. Please verify schema.sql policies in Supabase.' };
+        }
+        return { error: `Account created, but could not save profile: ${errMsg}` };
       }
 
-      return null;
+      return { error: null };
     } catch (e: any) {
-      return e?.message || 'Something went wrong during registration.';
+      console.error('Unexpected error in register():', e);
+      return { error: e?.message || 'An unexpected error occurred during registration. Please try again.' };
     }
   }
 
@@ -196,7 +302,7 @@ export class AuthService {
    */
   async login(email: string, password: string): Promise<string | null> {
     if (!this.isConfigured()) {
-      return 'Supabase credentials not configured. Please add your SUPABASE_URL and SUPABASE_ANON_KEY in src/environments/environment.ts.';
+      return 'Supabase credentials not configured. Please add SUPABASE_URL and SUPABASE_ANON_KEY in src/environments/environment.ts.';
     }
 
     try {
@@ -207,7 +313,17 @@ export class AuthService {
       });
 
       if (error) {
-        return error.message;
+        const msg = error.message || '';
+        if (error.status === 429 || msg.toLowerCase().includes('rate limit') || msg.toLowerCase().includes('too many requests')) {
+          return 'Too many login attempts. Please wait a few minutes and try again.';
+        }
+        if (msg.toLowerCase().includes('invalid login credentials')) {
+          return 'Incorrect email or password. Please try again.';
+        }
+        if (msg.toLowerCase().includes('email not confirmed')) {
+          return 'Please check your email and confirm your account before logging in.';
+        }
+        return msg || 'Login failed. Please check your credentials.';
       }
 
       const su = data.user;

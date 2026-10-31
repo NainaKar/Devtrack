@@ -87,6 +87,12 @@ import { Level } from '../models';
                   </div>
                 }
 
+                @if (infoMessage()) {
+                  <div class="auth-alert-info" role="status">
+                    {{ infoMessage() }}
+                  </div>
+                }
+
                 <form (ngSubmit)="next()" #f="ngForm" novalidate>
                   @if (step() === 1) {
                     <!-- Full Name Field -->
@@ -98,7 +104,10 @@ import { Level } from '../models';
                           name="name"
                           type="text"
                           class="auth-pill-input"
-                          [(ngModel)]="name"
+                          [ngModel]="name()"
+                          (ngModelChange)="name.set($event)"
+                          (input)="onFieldInput('name', $event)"
+                          (change)="onFieldInput('name', $event)"
                           required
                           minlength="2"
                           autocomplete="name"
@@ -116,7 +125,10 @@ import { Level } from '../models';
                           name="email"
                           type="email"
                           class="auth-pill-input"
-                          [(ngModel)]="email"
+                          [ngModel]="email()"
+                          (ngModelChange)="email.set($event)"
+                          (input)="onFieldInput('email', $event)"
+                          (change)="onFieldInput('email', $event)"
                           required
                           email
                           autocomplete="email"
@@ -134,7 +146,10 @@ import { Level } from '../models';
                           name="password"
                           [type]="showPassword() ? 'text' : 'password'"
                           class="auth-pill-input has-eye"
-                          [(ngModel)]="password"
+                          [ngModel]="password()"
+                          (ngModelChange)="password.set($event)"
+                          (input)="onFieldInput('password', $event)"
+                          (change)="onFieldInput('password', $event)"
                           required
                           minlength="6"
                           autocomplete="new-password"
@@ -324,12 +339,13 @@ export class Register {
 
   step = signal(1);
   error = signal('');
+  infoMessage = signal('');
   busy = signal(false);
   showPassword = signal(false);
 
-  name = '';
-  email = '';
-  password = '';
+  name = signal('');
+  email = signal('');
+  password = signal('');
 
   roleId = 'fullstack';
   position = 'Full-Stack Web Developer';
@@ -339,12 +355,22 @@ export class Register {
   hours = 10;
 
   isStep1Valid = computed(() => {
-    const nameOk = this.name.trim().length >= 2;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const emailOk = emailRegex.test(this.email.trim());
-    const passOk = this.password.length >= 6;
+    const n = (this.name() || '').trim();
+    const e = (this.email() || '').trim();
+    const p = this.password() || '';
+    const nameOk = n.length >= 2;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    const emailOk = emailRegex.test(e);
+    const passOk = p.length >= 6;
     return nameOk && emailOk && passOk;
   });
+
+  onFieldInput(field: 'name' | 'email' | 'password', ev: Event) {
+    const val = (ev.target as HTMLInputElement)?.value ?? '';
+    if (field === 'name') this.name.set(val);
+    else if (field === 'email') this.email.set(val);
+    else if (field === 'password') this.password.set(val);
+  }
 
   togglePassword() {
     this.showPassword.update(v => !v);
@@ -359,13 +385,33 @@ export class Register {
 
   async next() {
     this.error.set('');
+    this.infoMessage.set('');
+
     if (this.step() === 1) {
-      if (!this.isStep1Valid()) return;
+      const n = (this.name() || '').trim();
+      const e = (this.email() || '').trim();
+      const p = this.password() || '';
+
+      if (n.length < 2) {
+        this.error.set('Please enter your full name (at least 2 characters).');
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+      if (!emailRegex.test(e)) {
+        this.error.set('Please enter a valid email address.');
+        return;
+      }
+      if (p.length < 6) {
+        this.error.set('Password must be at least 6 characters.');
+        return;
+      }
+
       this.step.set(2);
       return;
     }
+
     this.busy.set(true);
-    const err = await this.auth.register(this.name, this.email, this.password, {
+    const result = await this.auth.register(this.name(), this.email(), this.password(), {
       roleId: this.roleId,
       position: this.position,
       company: this.company.trim(),
@@ -374,10 +420,18 @@ export class Register {
       weeklyHours: +this.hours,
     });
     this.busy.set(false);
-    if (err) {
-      this.error.set(err);
-    } else {
-      this.router.navigateByUrl('/app/dashboard');
+
+    if (result.error) {
+      this.error.set(result.error);
+      return;
     }
+
+    if (result.confirmEmail) {
+      this.infoMessage.set(`Account created! Check your email (${result.email || this.email()}) to confirm your account.`);
+      this.step.set(1);
+      return;
+    }
+
+    this.router.navigateByUrl('/app/dashboard');
   }
 }

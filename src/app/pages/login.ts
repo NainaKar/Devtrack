@@ -75,6 +75,12 @@ import { AuthService } from '../services/auth.service';
                   </div>
                 }
 
+                @if (infoMessage()) {
+                  <div class="auth-alert-info" role="status">
+                    {{ infoMessage() }}
+                  </div>
+                }
+
                 <form (ngSubmit)="submit()" #f="ngForm" novalidate>
                   <!-- Email Field -->
                   <div class="auth-field">
@@ -85,7 +91,10 @@ import { AuthService } from '../services/auth.service';
                         name="email"
                         type="email"
                         class="auth-pill-input"
-                        [(ngModel)]="email"
+                        [ngModel]="email()"
+                        (ngModelChange)="email.set($event)"
+                        (input)="onFieldInput('email', $event)"
+                        (change)="onFieldInput('email', $event)"
                         required
                         email
                         autocomplete="email"
@@ -103,7 +112,10 @@ import { AuthService } from '../services/auth.service';
                         name="password"
                         [type]="showPassword() ? 'text' : 'password'"
                         class="auth-pill-input has-eye"
-                        [(ngModel)]="password"
+                        [ngModel]="password()"
+                        (ngModelChange)="password.set($event)"
+                        (input)="onFieldInput('password', $event)"
+                        (change)="onFieldInput('password', $event)"
                         required
                         autocomplete="current-password"
                         placeholder="Enter your password"
@@ -167,33 +179,53 @@ export class Login {
   private auth = inject(AuthService);
   private router = inject(Router);
 
-  email = '';
-  password = '';
+  email = signal('');
+  password = signal('');
   error = signal('');
+  infoMessage = signal('');
   busy = signal(false);
   showPassword = signal(false);
 
   isLoginValid = computed(() => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(this.email.trim()) && this.password.length >= 1;
+    const e = (this.email() || '').trim();
+    const p = this.password() || '';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    return emailRegex.test(e) && p.length >= 1;
   });
+
+  onFieldInput(field: 'email' | 'password', ev: Event) {
+    const val = (ev.target as HTMLInputElement)?.value ?? '';
+    if (field === 'email') this.email.set(val);
+    else if (field === 'password') this.password.set(val);
+  }
 
   togglePassword() {
     this.showPassword.update(v => !v);
   }
 
   onForgot() {
-    this.error.set('Password reset instructions will be sent if an account matches this email.');
+    this.error.set('');
+    this.infoMessage.set('Password reset instructions will be sent if an account matches this email.');
   }
 
   async submit() {
-    if (!this.email.trim() || !this.password) {
+    this.error.set('');
+    this.infoMessage.set('');
+    const e = (this.email() || '').trim();
+    const p = this.password() || '';
+
+    if (!e || !p) {
       this.error.set('Please enter your email and password to log in.');
       return;
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    if (!emailRegex.test(e)) {
+      this.error.set('Please enter a valid email address.');
+      return;
+    }
+
     this.busy.set(true);
-    this.error.set('');
-    const err = await this.auth.login(this.email.trim(), this.password);
+    const err = await this.auth.login(e, p);
     this.busy.set(false);
     if (err) {
       this.error.set(err);
