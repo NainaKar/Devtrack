@@ -7,7 +7,7 @@ import {
   OnDestroy,
   NgZone
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -26,9 +26,9 @@ import { AuthService } from '../../services/auth.service';
         <!-- Desktop Navigation Links -->
         <div class="links desktop-only">
           <a routerLink="/about">About & Methodology</a>
-          <a href="#features">Features</a>
-          <a href="#how">How it works</a>
-          <a href="#roles">Roles</a>
+          <a [routerLink]="['/']" [fragment]="'features'" (click)="scrollToSection($event, 'features')">Features</a>
+          <a [routerLink]="['/']" [fragment]="'how'" (click)="scrollToSection($event, 'how')">How it works</a>
+          <a [routerLink]="['/']" [fragment]="'roles'" (click)="scrollToSection($event, 'roles')">Roles</a>
           @if (auth.isLoggedIn()) {
             <a class="btn s" routerLink="/app/dashboard">Open Workspace →</a>
           } @else {
@@ -76,9 +76,9 @@ import { AuthService } from '../../services/auth.service';
             </button>
           </div>
           <div class="mobile-drawer-links">
-            <a href="#features" (click)="closeMobile()">Features</a>
-            <a href="#how" (click)="closeMobile()">How it works</a>
-            <a href="#roles" (click)="closeMobile()">Roles</a>
+            <a [routerLink]="['/']" [fragment]="'features'" (click)="scrollToSection($event, 'features'); closeMobile()">Features</a>
+            <a [routerLink]="['/']" [fragment]="'how'" (click)="scrollToSection($event, 'how'); closeMobile()">How it works</a>
+            <a [routerLink]="['/']" [fragment]="'roles'" (click)="scrollToSection($event, 'roles'); closeMobile()">Roles</a>
             <a routerLink="/about" (click)="closeMobile()">About & Methodology</a>
 
             <div class="mobile-divider"></div>
@@ -388,6 +388,7 @@ import { AuthService } from '../../services/auth.service';
 export class LandingNavComponent implements OnInit, OnDestroy {
   auth = inject(AuthService);
   private ngZone = inject(NgZone);
+  private router = inject(Router);
 
   isScrolled = signal(false);
   mobileOpen = signal(false);
@@ -399,6 +400,17 @@ export class LandingNavComponent implements OnInit, OnDestroy {
 
   closeMobile(): void {
     this.mobileOpen.set(false);
+  }
+
+  scrollToSection(event: Event, fragment: string): void {
+    if (this.router.url === '/' || this.router.url.startsWith('/#')) {
+      event.preventDefault();
+      const el = document.getElementById(fragment);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', `#${fragment}`);
+      }
+    }
   }
 
   ngOnInit(): void {
