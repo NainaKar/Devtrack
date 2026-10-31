@@ -426,7 +426,12 @@ export class LandingFooterComponent {
       e.preventDefault();
       const el = document.getElementById(fragment);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+        const prefersReducedMotion = typeof window !== 'undefined' &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        el.scrollIntoView({
+          behavior: prefersReducedMotion ? 'auto' : 'smooth',
+          block: 'start'
+        });
         try {
           history.pushState(null, '', '#' + fragment);
         } catch {}
