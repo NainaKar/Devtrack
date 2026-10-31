@@ -3,14 +3,23 @@ import { AuthService } from './auth.service';
 import { analyze, buildRoadmap } from '../engine';
 import { ROLES } from '../data/roles.data';
 import { ALL_TOPICS, CATEGORIES, CAT_BY_ID } from '../data/skills.data';
-import { JobApplication, JobStatus, ProjectIdea, ProjectStatus, UserProject } from '../models';
+import { Goals, JobApplication, JobStatus, Level, ProjectIdea, ProjectStatus, UserProject } from '../models';
 
 /** Bridges user data + pure engine into reactive signals the pages read. */
 @Injectable({ providedIn: 'root' })
 export class TrackerService {
   private auth = inject(AuthService);
+  private defaultGoals: Goals = {
+    roleId: 'fullstack',
+    position: 'Full-Stack Web Developer',
+    company: '',
+    timelineMonths: 6,
+    weeklyHours: 10,
+    level: 'Beginner',
+  };
+
   data = this.auth.data;
-  goals = computed(() => this.data()!.goals);
+  goals = computed(() => this.data()?.goals ?? this.defaultGoals);
   role = computed(() => ROLES.find(r => r.id === this.goals().roleId) ?? ROLES[0]);
   done = computed(() => new Set(this.data()?.doneTopics ?? []));
   completedProjects = computed(() => (this.data()?.projects ?? []).filter(p => p.status === 'Completed').length);
@@ -20,11 +29,32 @@ export class TrackerService {
     return analyze(this.role(), g.company, g.level, this.done(), this.completedProjects());
   });
 
-  roadmap = computed(() => buildRoadmap(this.analysis(), this.goals(), this.data()!));
+  roadmap = computed(() => {
+    const d = this.data() ?? {
+      goals: this.goals(),
+      github: '',
+      linkedin: '',
+      resumeName: '',
+      resumeUrl: '',
+      doneTopics: [],
+      projects: [],
+      jobs: [],
+      activity: [],
+      chat: [],
+    };
+    return buildRoadmap(this.analysis(), this.goals(), d);
+  });
 
   profileCompleteness = computed(() => {
-    const d = this.data()!;
-    const checks = [!!d.github, !!d.linkedin, !!d.resumeName, d.doneTopics.length > 0, d.projects.length > 0];
+    const d = this.data();
+    if (!d) return 0;
+    const checks = [
+      !!d.github,
+      !!d.linkedin,
+      !!d.resumeName,
+      (d.doneTopics?.length ?? 0) > 0,
+      (d.projects?.length ?? 0) > 0,
+    ];
     return Math.round((checks.filter(Boolean).length / checks.length) * 100);
   });
 

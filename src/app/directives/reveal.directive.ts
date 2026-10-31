@@ -17,8 +17,8 @@ export class RevealDirective implements OnInit, OnDestroy {
     const nativeEl = this.el.nativeElement;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (prefersReducedMotion) {
-      nativeEl.classList.remove('rv');
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+      nativeEl.classList.add('in');
       return;
     }
 
@@ -27,10 +27,16 @@ export class RevealDirective implements OnInit, OnDestroy {
       nativeEl.style.setProperty('--d', this.revealDelay);
     }
 
+    // Safety fallback: ensure element is always visible even if observer never triggers
+    const fallbackTimer = setTimeout(() => {
+      nativeEl.classList.add('in');
+    }, 1800);
+
     this.ngZone.runOutsideAngular(() => {
       this.observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            clearTimeout(fallbackTimer);
             nativeEl.classList.add('in');
             this.observer?.unobserve(nativeEl);
             setTimeout(() => {

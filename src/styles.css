@@ -1931,15 +1931,20 @@ app-home {
   pointer-events: none;
 }
 
-/* Scroll reveal classes */
+/* Scroll reveal classes - elements must be visible by default so content never disappears or gets stuck hidden */
 .rv {
+  opacity: 1;
+  transform: none;
+}
+
+[appReveal].rv {
   opacity: 0;
   transform: translateY(26px);
   transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1);
   transition-delay: var(--d, 0s);
 }
 
-.rv.in {
+[appReveal].rv.in {
   opacity: 1;
   transform: none;
 }
@@ -3184,8 +3189,11 @@ app-home .rc .bar {
 }
 
 .db-shell .rv {
-  animation: db-rise .7s cubic-bezier(.2, .7, .2, 1) backwards;
-  animation-delay: calc(var(--i, 0) * .07s);
+  opacity: 1;
+  transform: none;
+  transition: none;
+  animation: db-rise .6s cubic-bezier(.2, .7, .2, 1) backwards;
+  animation-delay: calc(min(var(--i, 0), 8) * .05s);
 }
 
 .db-shell .tk i,
