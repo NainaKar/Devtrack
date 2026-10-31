@@ -248,6 +248,7 @@ a:hover {
 }
 
 @media (max-width: 768px) {
+
   .g2,
   .g3,
   .g4 {
@@ -571,6 +572,7 @@ textarea {
 }
 
 @media (max-width: 768px) {
+
   input[type=text],
   input[type=email],
   input[type=password],
@@ -1923,9 +1925,10 @@ input[type=range] {
   --lp-fb: 'Instrument Sans', system-ui, sans-serif;
 }
 
-/* Hide default PublicLayout navbar & footer on the dedicated landing page */
+/* Hide default PublicLayout navbar & footer on the dedicated landing page, and default footer on About page */
 app-public-layout:has(app-home)>header.nav,
-app-public-layout:has(app-home)>footer.footer {
+app-public-layout:has(app-home)>footer.footer,
+app-public-layout:has(app-about)>footer.footer {
   display: none !important;
 }
 
@@ -3210,29 +3213,62 @@ app-home .rc .bar {
 
 /* Keyframe Animations */
 @keyframes db-rise {
-  from { opacity: 0; transform: translateY(22px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes db-bf {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
 }
 
 @keyframes db-bg {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
 }
 
 @keyframes db-rg {
-  from { --v: 0; }
+  from {
+    --v: 0;
+  }
 }
 
 @keyframes db-wig {
-  0%, 92%, 100% { transform: none; }
-  94% { transform: rotate(14deg); }
-  96% { transform: rotate(-12deg); }
-  98% { transform: rotate(8deg); }
+
+  0%,
+  92%,
+  100% {
+    transform: none;
+  }
+
+  94% {
+    transform: rotate(14deg);
+  }
+
+  96% {
+    transform: rotate(-12deg);
+  }
+
+  98% {
+    transform: rotate(8deg);
+  }
 }
 
 .db-shell .rv {
@@ -3258,6 +3294,7 @@ app-home .rc .bar {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .db-shell *,
   .db-shell *::before,
   .db-shell *::after {

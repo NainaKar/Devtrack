@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LandingFooterComponent } from './home/landing-footer.component';
 
 @Component({
   selector: 'app-about',
-  imports: [RouterLink],
+  imports: [RouterLink, LandingFooterComponent],
   template: `
   <section class="hero" style="padding:64px 0">
     <div class="container" style="max-width:840px">
@@ -65,7 +66,10 @@ import { RouterLink } from '@angular/router';
         <a class="btn btn-secondary" routerLink="/">Return to Home</a>
       </div>
     </div>
-  </section>`,
+  </section>
+
+  <app-landing-footer />
+  `,
   styles: [`
     :host {
       display: block;
